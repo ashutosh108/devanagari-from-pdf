@@ -26,7 +26,8 @@ repl = {
 	'd':		'"sra',
 	'e"':		'tra',
 	'ﬂ"':		'nna',
-	'}œ"':		'hma',
+	'œ"':		'hma',
+	'Â':		'hya',
 	'O"':		'ta',
 	'P"':		'tha',
 	'Q':		'da',
@@ -34,7 +35,7 @@ repl = {
 	'—"':		'tna',
 	'S"':		'na',
 	'\\"':		'va',
-	'V"':		'bra',
+	'V"':		'ba',
 	'W"':		'bha',
 	'X"':		'ma',
 	'Y"':		'ya',
@@ -42,7 +43,6 @@ repl = {
 	']"':		'"sa',
 	'[':		'la',
 	'c"':		'j~na',
-	'T"}':		'pra',
 	'T"n':		'pna',
 	'T"':		'pa',
 	'^"':		'.sa',
@@ -85,8 +85,12 @@ repl_prefix = {
 # trailing letters lookup. Must be longest-first among matching prefixes since
 # first match wins and we want the longest one among the two entries to win.
 # Almost every entry is duplicated with it's "prefix r" version. Later We test
-# if the last symbol of the key is '{' to add 'r' in front of syllable.  '{' is
-# a special case because it doesn't need corresponding "short a" entry
+# if the last symbol of the key is '{' to add 'r' in front of syllable.
+#
+# '{' (r-before-syllable) is a special case because it doesn't need
+# corresponding "short a" entry
+#
+# '}' means *trailing* r
 
 repl_trailing = {
 	'pu{':	'o',
@@ -105,7 +109,8 @@ repl_trailing = {
 	't':	'uu',
 	'u{':	'e',
 	'u':	'e',
-	'{':	'a'
+	'{':	'a',
+	'}':	'ra'
 }
 
 # optimization: group all entries by first char of it's key to make linear

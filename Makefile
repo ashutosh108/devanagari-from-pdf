@@ -18,7 +18,7 @@ sample/p%-decoded.pdf: sample/p%.pdf
 sample/p113.pdf: sample/vi1000\ -\ govindAcArya\ [san].pdf
 	pdfseparate -f $(patsubst sample/p%.pdf,%,$@) -l $(patsubst sample/p%.pdf,%,$@) "$<" $@
 
-p114.pdf: vi1000\ -\ govindAcArya\ [san].pdf
+sample/p114.pdf: sample/vi1000\ -\ govindAcArya\ [san].pdf
 	pdfseparate -f $(patsubst sample/p%.pdf,%,$@) -l $(patsubst sample/p%.pdf,%,$@) "$<" $@
 
 go: sample/p113-decoded.pdf
