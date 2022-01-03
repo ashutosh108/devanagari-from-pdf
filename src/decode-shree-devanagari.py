@@ -17,123 +17,6 @@ def add_virama_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
-def add_long_a_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith('a') and not t.endswith('aa'):
-			new_from = f + 'p'
-			new_to = t + 'a'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_long_u_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith('a') and not t.endswith('aa'):
-			new_from = f + 't'
-			new_to = t[:-1] + 'uu'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_u_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith('a') and not t.endswith('aa'):
-			new_from = f + 's'
-			new_to = t[:-1] + 'u'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_i_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
-			new_from = '<' + f
-			new_to = t[:-1] + 'i'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_long_i_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
-			new_from = f + 'r'
-			new_to = t[:-1] + 'ii'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_o_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
-			new_from = f + 'pu'
-			new_to = t[:-1] + 'o'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_au_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
-			new_from = f + 'pv'
-			new_to = t[:-1] + 'au'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_e_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
-			new_from = f + 'u'
-			new_to = t[:-1] + 'e'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_ai_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
-			new_from = f + 'v'
-			new_to = t[:-1] + 'ai'
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_r_before_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t[-1:] in "aiuoe":
-			new_from = f + '{'
-			new_to = 'r' + t
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_t_before_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if t[-1] in "aieou":
-			new_from = 'O' + f
-			new_to = 't' + t
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_ssh_before_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if t[-1] in "aieou":
-			new_from = ']' + f
-			new_to = '"s' + t
-			new[new_from] = new_to
-	return {**new, **dic}
-
-def add_s_before_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if t[-1] in "aieou":
-			new_from = '_' + f
-			new_to = 's' + t
-			new[new_from] = new_to
-	return {**new, **dic}
-
 repl = {
 	'@°':		'ka',
 	'B"':		'ga',
@@ -144,26 +27,16 @@ repl = {
 	'e"':		'tra',
 	'ﬂ"':		'nna',
 	'}œ"':		'hma',
-	'◊O"':		'kta',
-	'_O"':		'sta',
-	'SO"':		'nta',
 	'O"':		'ta',
 	'P"':		'tha',
-	'SQ':		'nda',
 	'Q':		'da',
 	'_"':		'sa',
 	'—"':		'tna',
 	'S"':		'na',
-	'_\\"':		'sva',
 	'\\"':		'va',
 	'V"':		'bra',
 	'W"':		'bha',
 	'X"':		'ma',
-	'\\Y"':		'vya',
-	'Y\\"':		'yva',
-	'_OY"':		'stya',
-	'SY"':		'nya',
-	'_Y"':		'sya',
 	'Y"':		'ya',
 	'Z':		'ra',
 	']"':		'"sa',
@@ -184,19 +57,6 @@ repl = {
 	'qwe':		'qwe'
 }
 repl = add_virama_rules(repl)
-repl = add_long_a_rules(repl)
-repl = add_u_rules(repl)
-repl = add_long_u_rules(repl)
-repl = add_o_rules(repl)
-repl = add_au_rules(repl)
-repl = add_i_rules(repl)
-repl = add_long_i_rules(repl)
-repl = add_e_rules(repl)
-repl = add_ai_rules(repl)
-repl = add_t_before_rules(repl)
-repl = add_r_before_rules(repl)
-repl = add_ssh_before_rules(repl)
-repl = add_s_before_rules(repl)
 repl = add_unchanging_letters(repl)
 
 # avoid replicating these special rules to "aa", "ii", halant etc
@@ -211,27 +71,104 @@ repl['#'] = '.h';
 repl['Ú'] = 'i';
 repl['ñ'] = '—';
 
-repl_for_letter = {}
+# letters modifying the following syllable
+repl_prefix = {
+	'O':	't',
+	']':	'"s',
+	'_':	's',
+	'S':	'n',
+	'\\':	'v',
+	'Y':	'y',
+	'◊':	'k'
+}
 
+# trailing letters lookup. Must be longest-first among matching prefixes since
+# first match wins and we want the longest one among the two entries to win.
+# Almost every entry is duplicated with it's "prefix r" version. Later We test
+# if the last symbol of the key is '{' to add 'r' in front of syllable.  '{' is
+# a special case because it doesn't need corresponding "short a" entry
+
+repl_trailing = {
+	'pu{':	'o',
+	'pu':	'o',
+	'pv{':	'au',
+	'pv':	'au',
+	'p{':	'aa',
+	'p':	'aa',
+	'v{':	'ai',
+	'v':	'ai',
+	'r{':	'ii',
+	'r':	'ii',
+	's{':	'u',
+	's':	'u',
+	't{':	'uu',
+	't':	'uu',
+	'u{':	'e',
+	'u':	'e',
+	'{':	'a'
+}
+
+# optimization: group all entries by first char of it's key to make linear
+# search shorter.
+repl_for_letter = {}
 for k, v in repl.items():
 	if k[0] in repl_for_letter:
 		repl_for_letter[k[0]][k] = v
 	else:
 		repl_for_letter[k[0]] = {k: v}
 
+def handle_i_modifier(i_modifier, repl_to):
+	if i_modifier:
+		if repl_to.endswith('a') and len(repl_to) > 1 and repl_to[-2] in "tdhmknyvpljbcsr":
+			repl_to = repl_to[:-1] + 'i'
+		else:
+			raise Exception("i modifier before unsupported replacement: '%s' => '%s'" % (repl_from, repl_to))
+	i_modifier = False
+	return i_modifier, repl_to
+
+def handle_trailing_vowels_and_r(line, repl_to):
+	got3 = line[0:3] in repl_trailing
+	got2 = line[0:2] in repl_trailing
+	if got3 or got2 or line[0:1] in repl_trailing:
+		from_trailing = line[0:3] if got3 else line[0:2] if got2 else line[0:1]
+		if repl_to.endswith('a'):
+			repl_to = repl_to[:-1] + repl_trailing[from_trailing]
+			# special case: add 'r' *before* the syllable
+			if from_trailing[-1] == '{':
+				repl_to = 'r' + repl_to
+			line = line[len(from_trailing):]
+		else:
+			raise Exception("'%s' modifier after a syllable ending not on 'a': %s" % (from_trailing, repl_to))
+	return line, repl_to
+
 def decodeline(line):
 	res = ''
+	# collect additional parts of final syllable until we see syllable completion
+	add_consonants_before_syllable = ''
+	# since -i is written before the syllable, flag it as necessary
+	i_modifier = False
 
 	while line:
 		continue2 = False
 		if line[0] in repl_for_letter:
 			for repl_from, repl_to in repl_for_letter[line[0]].items():
 				if line.startswith(repl_from):
-					res += repl_to
 					line = line[len(repl_from):]
+					i_modifier, repl_to = handle_i_modifier(i_modifier, repl_to)
+					line, repl_to = handle_trailing_vowels_and_r(line, repl_to)
+					res += add_consonants_before_syllable + repl_to
+					add_consonants_before_syllable = ''
 					continue2 = True
 					break
 		if continue2:
+			continue
+		if line[0] in repl_prefix:
+			add_consonants_before_syllable += repl_prefix[line[0]]
+			line = line[1:]
+			continue
+		if line[0] == '<':
+			i_modifier = True
+			line = line[1:]
 			continue
 		# could not find any known prefix, escape next char
 		res += "[" + line[0] + "]"
@@ -252,6 +189,4 @@ if __name__ == "__main__":
 		help="source .txt output from pdftotext")
 	args = parser.parse_args()
 
-	main(args);
-
-	#main(args)
+	main(args)
