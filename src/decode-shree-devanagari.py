@@ -71,6 +71,15 @@ def add_o_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
+def add_au_rules(dic):
+	new = {}
+	for f, t in dic.items():
+		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
+			new_from = f + 'pv'
+			new_to = t[:-1] + 'au'
+			new[new_from] = new_to
+	return {**new, **dic}
+
 def add_e_rules(dic):
 	new = {}
 	for f, t in dic.items():
@@ -119,6 +128,7 @@ def decodeline(line):
 		'Q':		'da',
 		'_"':		'sa',
 		'S"':		'na',
+		'_\\"':		'sva',
 		'\\"':		'va',
 		'V"':		'bra',
 		'<\\"':		'vi',
@@ -145,6 +155,8 @@ def decodeline(line):
 		'N"':		'.na',
 		'Ç"':		'cca',
 		'G"':		'ja',
+		'E"':		'ca',
+		'R"':		'dha',
 		'qwe':		'qwe'
 	}
 	repl = add_unchanging_letters(repl)
@@ -153,6 +165,7 @@ def decodeline(line):
 	repl = add_u_rules(repl)
 	repl = add_long_u_rules(repl)
 	repl = add_o_rules(repl)
+	repl = add_au_rules(repl)
 	repl = add_i_rules(repl)
 	repl = add_long_i_rules(repl)
 	repl = add_e_rules(repl)
