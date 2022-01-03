@@ -2,21 +2,10 @@
 
 # we use bash for <(cmd) argument to diff
 SHELL := bash
+TESTS := 1 2 3 4 5 6 7 8 9 10 11 12 13
 
 test: sample/p113.txt FORCE
-	@test/test-line 1 p113
-	@test/test-line 2 p113
-	@test/test-line 3 p113
-	@test/test-line 4 p113
-	@test/test-line 5 p113
-	@test/test-line 6 p113
-	@test/test-line 7 p113
-	@test/test-line 8 p113
-	@test/test-line 9 p113
-	@test/test-line 10 p113
-	@test/test-line 11 p113
-	@test/test-line 12 p113
-	@test/test-line 13 p113
+	@test/test-line p113 ${TESTS}
 
 sample/p113.txt: sample/p113.pdf
 	pdftotext -layout -nopgbrk $<
