@@ -13,6 +13,8 @@ test: sample/p113.txt FORCE
 	@test/test-line 7 p113
 	@test/test-line 8 p113
 	@test/test-line 9 p113
+	@test/test-line 10 p113
+	@test/test-line 11 p113
 
 sample/p113.txt: sample/p113.pdf
 	pdftotext -layout -nopgbrk $<
