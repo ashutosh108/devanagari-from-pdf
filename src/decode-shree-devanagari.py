@@ -35,6 +35,15 @@ def add_long_u_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
+def add_u_rules(dic):
+	new = {}
+	for f, t in dic.items():
+		if len(t) > 1 and t.endswith('a') and not t.endswith('aa'):
+			new_from = f + 's'
+			new_to = t[:-1] + 'u'
+			new[new_from] = new_to
+	return {**new, **dic}
+
 def add_i_rules(dic):
 	new = {}
 	for f, t in dic.items():
@@ -74,7 +83,7 @@ def add_e_rules(dic):
 def add_r_before_rules(dic):
 	new = {}
 	for f, t in dic.items():
-		if len(t) > 1 and t.endswith("a"):
+		if len(t) > 1 and t[-1:] in "aiuoe":
 			new_from = f + '{'
 			new_to = 'r' + t
 			new[new_from] = new_to
@@ -119,11 +128,14 @@ def decodeline(line):
 		'[':		'la',
 		'c"':		'j~na',
 		'T"':		'pa',
+		'^"':		'.sa',
+		'ù':		'dya',
 		'qwe':		'qwe'
 	}
 	repl = add_unchanging_letters(repl)
 	repl = add_virama_rules(repl)
 	repl = add_long_a_rules(repl)
+	repl = add_u_rules(repl)
 	repl = add_long_u_rules(repl)
 	repl = add_o_rules(repl)
 	repl = add_i_rules(repl)
