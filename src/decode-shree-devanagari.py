@@ -115,7 +115,6 @@ def decodeline(line):
 		'e"':		'tra',
 		'ﬂ"':		'nna',
 		'#':		'.h',
-		'Ï':		'a',
 		'Ú':		'i',
 		'ñ':		'—',
 		'}œ"':		'hma',
@@ -125,6 +124,7 @@ def decodeline(line):
 		'O_"':		'tsa',
 		'O\\"':		'tva',
 		'P"':		'tha',
+		'SQ':		'nda',
 		'Q':		'da',
 		'_"':		'sa',
 		'OS"':		'tna',
@@ -143,6 +143,7 @@ def decodeline(line):
 		'SY"':		'nya',
 		'_Y"':		'sya',
 		'OY"':		'tya',
+		']Y"':		'"sya',
 		'Y"':		'ya',
 		'Z':		'ra',
 		'@°':		'ka',
@@ -159,6 +160,7 @@ def decodeline(line):
 		'Õ>':		'.s.ta',
 		'N"':		'.na',
 		'Ç"':		'cca',
+		'∆"':		'"sca',
 		'G"':		'ja',
 		'E"':		'ca',
 		'R"':		'dha',
@@ -181,6 +183,10 @@ def decodeline(line):
 	# avoid replicating these special rules to "aa", "ii", halant etc
 	repl['&'] = '.a'
 	repl['·°'] = 'ruu'
+	repl['ë'] = '‘'; # U+2018 left single quotation mark
+	repl['í'] = '’'; # U+2019 right single quotation mark
+	repl['Ïp'] = 'aa';
+	repl['Ï'] = 'a';
 
 	res = ''
 
