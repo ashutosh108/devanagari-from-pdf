@@ -130,6 +130,11 @@ def decodeline(line):
 		'T"':		'pa',
 		'^"':		'.sa',
 		'ù':		'dya',
+		'b"':		'k.sa',
+		'z':		'.m',
+		'Õ>':		'.s.ta',
+		'N"':		'.na',
+		'Ç"':		'cca',
 		'qwe':		'qwe'
 	}
 	repl = add_unchanging_letters(repl)
