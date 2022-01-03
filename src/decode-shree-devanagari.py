@@ -2,7 +2,7 @@
 import argparse
 
 def add_unchanging_letters(dic):
-	letters_as_they_are = "0123456789()- .\n\f"
+	letters_as_they_are = "0123456789()- .,\n\f"
 	new = {}
 	for c in letters_as_they_are:
 		new[c] = c
@@ -31,6 +31,7 @@ repl = {
 	'O"':		'ta',
 	'P"':		'tha',
 	'Q':		'da',
+	'´':		'ddha',
 	'ü':		'dva',
 	'_"':		'sa',
 	'—"':		'tna',
@@ -56,6 +57,7 @@ repl = {
 	'R"':		'dha',
 	'ä':		'"nka',
 	'Å"':		'~nca',
+	'`':		'ha',
 	'qwe':		'qwe'
 }
 repl = add_virama_rules(repl)
@@ -64,6 +66,7 @@ repl = add_unchanging_letters(repl)
 # avoid replicating these special rules to "aa", "ii", halant etc
 repl['&'] = '.a'
 repl['·°'] = 'ruu'
+repl['‡'] = 'ru'
 repl['ë'] = '‘'; # U+2018 left single quotation mark
 repl['í'] = '’'; # U+2019 right single quotation mark
 repl['Ïp'] = 'aa';
@@ -71,6 +74,7 @@ repl['Ï'] = 'a';
 repl['Ô'] = 'e';
 repl['$'] = '|';
 repl['#'] = '.h';
+repl['Ú{'] = 'ii';
 repl['Ú'] = 'i';
 repl['ñ'] = '—';
 
