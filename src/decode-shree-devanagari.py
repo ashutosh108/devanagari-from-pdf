@@ -120,6 +120,7 @@ def decodeline(line):
 		'}œ"':		'hma',
 		'◊O"':		'kta',
 		'_O"':		'sta',
+		'SO"':		'nta',
 		'O"':		'ta',
 		'O_"':		'tsa',
 		'O\\"':		'tva',
