@@ -4,7 +4,9 @@
 SHELL := bash
 
 test: sample/p113.txt FORCE
-	diff -u <(src/decode-shree-devanagari.py $<) test/p113-expected.txt
+	@test/test-line 1 p113
+	@test/test-line 2 p113
+	@test/test-line 3 p113
 
 sample/p113.txt: sample/p113.pdf
 	pdftotext -layout -nopgbrk $< -|head -3 > $@
