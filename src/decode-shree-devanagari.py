@@ -35,6 +35,15 @@ def add_long_u_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
+def add_i_rules(dic):
+	new = {}
+	for f, t in dic.items():
+		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
+			new_from = '<' + f
+			new_to = t[:-1] + 'i'
+			new[new_from] = new_to
+	return {**new, **dic}
+
 def add_long_i_rules(dic):
 	new = {}
 	for f, t in dic.items():
@@ -53,6 +62,24 @@ def add_o_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
+def add_e_rules(dic):
+	new = {}
+	for f, t in dic.items():
+		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
+			new_from = f + 'u'
+			new_to = t[:-1] + 'e'
+			new[new_from] = new_to
+	return {**new, **dic}
+
+def add_r_before_rules(dic):
+	new = {}
+	for f, t in dic.items():
+		if len(t) > 1 and t.endswith("a"):
+			new_from = f + '{'
+			new_to = 'r' + t
+			new[new_from] = new_to
+	return {**new, **dic}
+
 def decodeline(line):
 	repl = {
 		'$':		'|',
@@ -62,6 +89,7 @@ def decodeline(line):
 		'ﬂ"':		'nna',
 		'#':		'.h',
 		'Ï':		'a',
+		'Ú':		'i',
 		'ñ':		'—',
 		'}œ"':		'hma',
 		'◊O"':		'kta',
@@ -78,14 +106,19 @@ def decodeline(line):
 		'<\\"':		'vi',
 		'W"':		'bha',
 		'<W"':		'bhi',
+		'OX"':		'tma',
 		'X"':		'ma',
 		'\\Y"':		'vya',
 		'Y\\"':		'yva',
 		'_OY"':		'stya',
+		'SY"':		'nya',
 		'Y"':		'ya',
 		'Z':		'ra',
 		'@°':		'ka',
 		']"':		'"sa',
+		'[':		'la',
+		'c"':		'j~na',
+		'T"':		'pa',
 		'qwe':		'qwe'
 	}
 	repl = add_unchanging_letters(repl)
@@ -93,7 +126,14 @@ def decodeline(line):
 	repl = add_long_a_rules(repl)
 	repl = add_long_u_rules(repl)
 	repl = add_o_rules(repl)
+	repl = add_i_rules(repl)
 	repl = add_long_i_rules(repl)
+	repl = add_e_rules(repl)
+	repl = add_r_before_rules(repl)
+
+	# avoid replicating these special rules to "aa", "ii", halant etc
+	repl['&'] = '.a'
+	repl['·°'] = 'ruu'
 
 	res = ''
 

@@ -7,9 +7,10 @@ test: sample/p113.txt FORCE
 	@test/test-line 1 p113
 	@test/test-line 2 p113
 	@test/test-line 3 p113
+	@test/test-line 4 p113
 
 sample/p113.txt: sample/p113.pdf
-	pdftotext -layout -nopgbrk $< -|head -3 > $@
+	pdftotext -layout -nopgbrk $<
 
 all: p113-decoded.pdf p114-decoded.pdf
 
