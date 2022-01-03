@@ -31,6 +31,7 @@ repl = {
 	'O"':		'ta',
 	'P"':		'tha',
 	'Q':		'da',
+	'ü':		'dva',
 	'_"':		'sa',
 	'—"':		'tna',
 	'S"':		'na',
@@ -54,6 +55,7 @@ repl = {
 	'∆"':		'"sca',
 	'R"':		'dha',
 	'ä':		'"nka',
+	'Å"':		'~nca',
 	'qwe':		'qwe'
 }
 repl = add_virama_rules(repl)
@@ -66,6 +68,7 @@ repl['ë'] = '‘'; # U+2018 left single quotation mark
 repl['í'] = '’'; # U+2019 right single quotation mark
 repl['Ïp'] = 'aa';
 repl['Ï'] = 'a';
+repl['Ô'] = 'e';
 repl['$'] = '|';
 repl['#'] = '.h';
 repl['Ú'] = 'i';
@@ -79,6 +82,7 @@ repl_prefix = {
 	'S':	'n',
 	'\\':	'v',
 	'Y':	'y',
+	'E':	'c',
 	'◊':	'k'
 }
 
