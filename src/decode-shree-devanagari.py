@@ -80,6 +80,15 @@ def add_e_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
+def add_ai_rules(dic):
+	new = {}
+	for f, t in dic.items():
+		if len(t) > 1 and t.endswith("a") and not t.endswith('aa'):
+			new_from = f + 'v'
+			new_to = t[:-1] + 'ai'
+			new[new_from] = new_to
+	return {**new, **dic}
+
 def add_r_before_rules(dic):
 	new = {}
 	for f, t in dic.items():
@@ -135,6 +144,7 @@ def decodeline(line):
 		'Õ>':		'.s.ta',
 		'N"':		'.na',
 		'Ç"':		'cca',
+		'G"':		'ja',
 		'qwe':		'qwe'
 	}
 	repl = add_unchanging_letters(repl)
@@ -146,6 +156,7 @@ def decodeline(line):
 	repl = add_i_rules(repl)
 	repl = add_long_i_rules(repl)
 	repl = add_e_rules(repl)
+	repl = add_ai_rules(repl)
 	repl = add_r_before_rules(repl)
 
 	# avoid replicating these special rules to "aa", "ii", halant etc
