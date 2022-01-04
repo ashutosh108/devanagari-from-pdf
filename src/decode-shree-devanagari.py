@@ -18,85 +18,84 @@ def add_virama_rules(dic):
 	return {**new, **dic}
 
 repl = {
-	'@z°':		'ka.m',
-	'@°':		'ka',
-	'@w°':		'k.r',
-	'A"':		'kha',
-	'òz°':		'kta.m',
-	'B"':		'ga',
-	'E"':		'ca',
-	'G"':		'ja',
-	'N"':		'.na',
-	'd':		'"sra',
-	'e"':		'tra',
-	'ﬂ"':		'nna',
-	'œ"':		'hma',
-	'Â':		'hya',
-	'O"':		'ta',
-	'P"':		'tha',
-	'Q':		'da',
-	'´':		'ddha',
-	'ü':		'dva',
-	'_"':		'sa',
-	'æ':		'sra',
-	'—"':		'tna',
-	'S"':		'na',
-	'\\"':		'va',
-	'V"':		'ba',
-	'W"':		'bha',
-	'X"':		'ma',
-	'Y"':		'ya',
-	'Z':		'ra',
-	']"':		'"sa',
-	'[':		'la',
-	'c"':		'j~na',
-	'T"n':		'pna',
-	'\xa0"':	'pta',
-	'T"':		'pa',
-	'^"':		'.sa',
-	'ù':		'dya',
-	'b"':		'k.sa',
-	'z':		'.m',
-	'Õ>':		'.s.ta',
-	'Ç"':		'cca',
-	'∆"':		'"sca',
-	'R"':		'dha',
-	'ä':		'"nka',
-	'Å"':		'~nca',
-	'`':		'ha',
-	'‚':		'h.r',
-	'qwe':		'qwe'
+	'@w\u00b0':			'k.r',
+	'@z\u00b0':			'ka.m',
+	'@\u00b0':			'ka',
+	'A"':				'kha',
+	'B"':				'ga',
+	'E"':				'ca',
+	'G"':				'ja',
+	'N"':				'.na',
+	'O"':				'ta',
+	'P"':				'tha',
+	'Q':				'da',
+	'R"':				'dha',
+	'S"':				'na',
+	'T"n':				'pna',
+	'T"':				'pa',
+	'V"':				'ba',
+	'W"':				'bha',
+	'X"':				'ma',
+	'Y"':				'ya',
+	'Z':				'ra',
+	'[':				'la',
+	'\\"':				'va',
+	']"':				'"sa',
+	'^"':				'.sa',
+	'_"':				'sa',
+	'`':				'ha',
+	'b"':				'k.sa',
+	'c"':				'j~na',
+	'd':				'"sra',
+	'e"':				'tra',
+	'z':				'.m',
+	'\u00a0"':			'pta',
+	'\u00b4':			'ddha',
+	'\u00c2':			'hya',
+	'\u00c5"':			'~nca',
+	'\u00c7"':			'cca',
+	'\u00d5>':			'.s.ta',
+	'\u00e4':			'"nka',
+	'\u00e6':			'sra',
+	'\u00f2z\u00b0':	'kta.m',
+	'\u00f9':			'dya',
+	'\u00fc':			'dva',
+	'\u0153"':			'hma',
+	'\u2014"':			'tna',
+	'\u201a':			'h.r',
+	'\u2206"':			'"sca',
+	'\ufb02"':			'nna',
 }
 repl = add_virama_rules(repl)
 repl = add_unchanging_letters(repl)
 
 # avoid replicating these special rules to "aa", "ii", halant etc
+repl['#'] = '.h'
+repl['$'] = '|'
 repl['&'] = '.a'
-repl['·°'] = 'ruu'
-repl['‡'] = 'ru'
-repl['ë'] = '‘'; # U+2018 left single quotation mark
-repl['í'] = '’'; # U+2019 right single quotation mark
-repl['Ïp'] = 'aa';
-repl['Ï'] = 'a';
-repl['Ô'] = 'e';
-repl['$'] = '|';
-repl['#'] = '.h';
-repl['Ú{'] = 'ii';
-repl['Ú'] = 'i';
-repl['ñ'] = '—';
+repl['\u00b7\u00b0'] = 'ruu'
+repl['\u00cfp'] = 'aa'
+repl['\u00cf'] = 'a'
+repl['\u00d4'] = 'e'
+repl['\u00da{'] = 'ii'
+repl['\u00da'] = 'i'
+repl['\u00eb'] = '\u2018' # U+2018 left single quotation mark
+repl['\u00ed'] = '\u2019' # U+2019 right single quotation mark
+repl['\u00f1'] = '—'
+repl['\u2021'] = 'ru'
 
 # letters modifying the following syllable
 repl_prefix = {
-	'O':	't',
-	']':	'"s',
-	'_':	's',
-	'S':	'n',
-	'T':	'p',
-	'X':	'm',
-	'\\':	'v',
-	'Y':	'y',
-	'E':	'c',
-	'◊':	'k'
+	'E':		'c',
+	'O':		't',
+	'S':		'n',
+	'T':		'p',
+	'X':		'm',
+	'Y':		'y',
+	'\\':		'v',
+	']':		'"s',
+	'_':		's',
+	'\u25ca':	'k',
 }
 
 # trailing vowels lookup. Must be longest-first among matching prefixes since
@@ -104,15 +103,15 @@ repl_prefix = {
 # e.g. 'pv' must go before 'p'.
 
 repl_trailing = {
+	'l':	'u',
 	'pu':	'o',
 	'pv':	'au',
 	'p':	'aa',
-	'v':	'ai',
 	'r':	'ii',
 	's':	'u',
-	'l':	'u',
 	't':	'uu',
-	'u':	'e'
+	'u':	'e',
+	'v':	'ai',
 }
 
 # optimization: group all entries by first char of it's key to make linear
