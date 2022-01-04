@@ -56,7 +56,7 @@ repl = {
 	'\u00c5"':			'~nca',
 	'\u00c7"':			'cca',
 	'\u00c9"':			'jja',
-	'\u00d5>':			'.s.ta',
+	'\u00d5':			'.s.ta',
 	'\u00e4':			'"nka',
 	'\u00e6':			'sra',
 	'\u00f2z\u00b0':	'kta.m',
@@ -89,24 +89,19 @@ repl['\u2021'] = 'ru'
 
 # letters modifying the following syllable
 repl_prefix = {
-	'E':		'c',
-	'O':		't',
-	'S':		'n',
-	'T':		'p',
-	'X':		'm',
-	'Y':		'y',
-	'\\':		'v',
-	']':		'"s',
-	'_':		's',
 	'\u25ca':	'k',
 }
+for k, v in repl.items():
+	if len(k)==2 and k[1] == '"':
+		if not (len(v) > 1 and v[-1] == 'a'):
+			raise Exception("wrong replacement pair found: '%s' => '%s' pattern ends on '\"', but replacement doesn't end on 'a'" % (k, v))
+		repl_prefix[k[0]] = v[:-1]
 
 # trailing vowels lookup. Must be longest-first among matching prefixes since
 # first match wins and we want the longest one among the two entries to win.
 # e.g. 'pv' must go before 'p'.
 
 repl_trailing = {
-	'>':	'',	# used as spacing after .dha
 	'l':	'u',
 	'pu':	'o',
 	'pv':	'au',
@@ -168,6 +163,9 @@ def handle_trailing_vowels_and_r(line, repl_to):
 		# r-...-.m as combined as a single char
 		elif line[0:1] == '|':
 			repl_to = 'r' + repl_to + '.m'
+			line = line[1:]
+		# used as spacing after e.g. .s.t or .dha
+		elif line[0:1] == '>':
 			line = line[1:]
 		else:
 			break
