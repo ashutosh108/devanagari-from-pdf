@@ -51,6 +51,7 @@ repl = {
 	'[':		'la',
 	'c"':		'j~na',
 	'T"n':		'pna',
+	'\xa0"':	'pta',
 	'T"':		'pa',
 	'^"':		'.sa',
 	'ù':		'dya',
@@ -63,6 +64,7 @@ repl = {
 	'ä':		'"nka',
 	'Å"':		'~nca',
 	'`':		'ha',
+	'‚':		'h.r',
 	'qwe':		'qwe'
 }
 repl = add_virama_rules(repl)
@@ -184,11 +186,11 @@ def decodeline(line):
 					break
 		if continue2:
 			continue
-		if line[0] in repl_prefix:
+		if line[0:1] in repl_prefix:
 			add_consonants_before_syllable += repl_prefix[line[0]]
 			line = line[1:]
 			continue
-		if line[0] == '<' or line[0] == 'q':
+		if line[0:1] == '<' or line[0:1] == 'q' or line[0:1] == 'ì':
 			i_modifier = True
 			line = line[1:]
 			continue
