@@ -18,7 +18,9 @@ def add_virama_rules(dic):
 	return {**new, **dic}
 
 repl = {
+	'@z°':		'ka.m',
 	'@°':		'ka',
+	'òz°':		'kta.m',
 	'B"':		'ga',
 	'E"':		'ca',
 	'G"':		'ja',
@@ -118,7 +120,8 @@ repl_trailing = {
 	'u{':	'e',
 	'u':	'e',
 	'{':	'a',
-	'}':	'ra'
+	'}r':	'rii',
+	'}':	'ra',
 }
 
 # optimization: group all entries by first char of it's key to make linear
@@ -179,7 +182,7 @@ def decodeline(line):
 			add_consonants_before_syllable += repl_prefix[line[0]]
 			line = line[1:]
 			continue
-		if line[0] == '<':
+		if line[0] == '<' or line[0] == 'q':
 			i_modifier = True
 			line = line[1:]
 			continue
