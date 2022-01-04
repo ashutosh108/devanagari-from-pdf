@@ -54,6 +54,7 @@ repl = {
 	'\u00c2':			'hya',
 	'\u00c5"':			'~nca',
 	'\u00c7"':			'cca',
+	'\u00c9"':			'jja',
 	'\u00d5>':			'.s.ta',
 	'\u00e4':			'"nka',
 	'\u00e6':			'sra',
@@ -74,6 +75,7 @@ repl['#'] = '.h'
 repl['$'] = '|'
 repl['&'] = '.a'
 repl['\u00b7\u00b0'] = 'ruu'
+repl['\u00cc'] = 'u';
 repl['\u00cfp'] = 'aa'
 repl['\u00cf'] = 'a'
 repl['\u00d4'] = 'e'
