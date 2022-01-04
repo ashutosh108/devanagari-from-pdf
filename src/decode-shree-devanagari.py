@@ -20,6 +20,7 @@ def add_virama_rules(dic):
 repl = {
 	'@z°':		'ka.m',
 	'@°':		'ka',
+	'A"':		'kha',
 	'òz°':		'kta.m',
 	'B"':		'ga',
 	'E"':		'ca',
@@ -115,6 +116,7 @@ repl_trailing = {
 	'r':	'ii',
 	's{':	'u',
 	's':	'u',
+	'l':	'u',
 	't{':	'uu',
 	't':	'uu',
 	'u{':	'e',
