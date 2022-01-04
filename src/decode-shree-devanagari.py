@@ -165,6 +165,10 @@ def handle_trailing_vowels_and_r(line, repl_to):
 		elif line[0:1] == '}':
 			repl_to = add_before_last_vowel('r', repl_to)
 			line = line[1:]
+		# r-...-.m as combined as a single char
+		elif line[0:1] == '|':
+			repl_to = 'r' + repl_to + '.m'
+			line = line[1:]
 		else:
 			break
 	return line, repl_to
