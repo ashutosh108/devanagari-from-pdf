@@ -24,3 +24,6 @@ sample/p114.pdf: sample/vi1000\ -\ govindAcArya\ [san].pdf
 go: sample/p113-decoded.pdf
 	fix-qdf sample/p113-decoded.pdf > sample/p113-decoded-.pdf
 	xdg-open sample/p113-decoded-.pdf
+
+clean:
+	rm -f sample/p113.txt sample/p114.{txt,pdf} sample/p113-decoded{,-}.pdf
