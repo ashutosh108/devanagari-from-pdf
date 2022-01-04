@@ -25,6 +25,7 @@ repl = {
 	'B"':				'ga',
 	'E"':				'ca',
 	'G"':				'ja',
+	'M':				'.dha', # always 'M>' but '>' is just spacing
 	'N"':				'.na',
 	'O"':				'ta',
 	'P"':				'tha',
@@ -105,6 +106,7 @@ repl_prefix = {
 # e.g. 'pv' must go before 'p'.
 
 repl_trailing = {
+	'>':	'',	# used as spacing after .dha
 	'l':	'u',
 	'pu':	'o',
 	'pv':	'au',
@@ -114,6 +116,7 @@ repl_trailing = {
 	't':	'uu',
 	'u':	'e',
 	'v':	'ai',
+	'w':	'.r',
 }
 
 # optimization: group all entries by first char of it's key to make linear
