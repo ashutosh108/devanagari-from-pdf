@@ -20,6 +20,7 @@ def add_virama_rules(dic):
 repl = {
 	'@z°':		'ka.m',
 	'@°':		'ka',
+	'@w°':		'k.r',
 	'A"':		'kha',
 	'òz°':		'kta.m',
 	'B"':		'ga',
@@ -87,6 +88,7 @@ repl_prefix = {
 	']':	'"s',
 	'_':	's',
 	'S':	'n',
+	'X':	'm',
 	'\\':	'v',
 	'Y':	'y',
 	'E':	'c',
