@@ -141,9 +141,9 @@ chars = {
 	'\u00e7':			'"ngha',	# ç
 	'\u00e8':			'"nk.sa',	# è
 	'\u00e9':			'"nma',		# é
-	'\u00eb':			'-n',		# ë ?
+	'\u00eb':			'\u2018', 	# U+2018 left single quotation mark
 	'\u00ec':			'i-',		# ì
-	'\u00ed':			'[???]',	# í -n turned to up-right?
+	'\u00ed':			'\u2019',	# U+2019 right single quotation mark
 	'\u00ee':			'-ii',		# î what is different from 'r'?
 	'\u00f1':			'\u2013',	# ñ –, en-dash
 	'\u00f2':			'kta',		# ò
@@ -217,7 +217,7 @@ repl = {
 	'\u00d5':			'.s.ta',
 	'\u00e4':			'"nka',
 	'\u00e6':			'sra',
-	'\u00f2z\u00b0':	'kta.m',
+	'\u00f2z':			'kta.m',
 	'\u00f9':			'dya',
 	'\u00fc':			'dva',
 	'\u0153"':			'hma',
@@ -305,9 +305,6 @@ def handle_trailing_vowels_and_r(line, repl_to):
 		if got3 or got2 or line[0:1] in repl_trailing:
 			from_trailing = line[0:3] if got3 else line[0:2] if got2 else line[0:1]
 			repl_to = repl_to[:-1] + repl_trailing[from_trailing]
-			# special case: add 'r' *before* the syllable
-			if from_trailing[-1] == '{':
-				repl_to = 'r' + repl_to
 			line = line[len(from_trailing):]
 		# add frontal "r" as in rvi, rva
 		elif line[0:1] == '{':
