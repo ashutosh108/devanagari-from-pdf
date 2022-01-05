@@ -9,6 +9,10 @@ BASE_NAME=$1
 
 while shift; do
 	[ -z "$1" ] && break
-	diff -u <(sed "$1q;d" test/$BASE_NAME-expected.txt) <(sed "$1q;d" sample/$BASE_NAME.txt | src/decode-shree-devanagari.py -) && RESULT="$OK" || RESULT="$FAIL\n"
+	if [[ "$VERBOSE" -gt 0 ]]; then
+		echo "$(sed "$1q;d" sample/$BASE_NAME.txt)"
+	fi
+	EXPECTED=$(sed "$1q;d" test/$BASE_NAME-expected.txt)
+	diff -u - <<< "$EXPECTED" <(sed "$1q;d" sample/$BASE_NAME.txt | src/decode-shree-devanagari.py -) && RESULT="$OK" || RESULT="$FAIL\n"
 	printf "TEST LINE $1 of $BASE_NAME:	$RESULT\n"
 done
