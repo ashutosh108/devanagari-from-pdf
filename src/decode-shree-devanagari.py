@@ -17,168 +17,208 @@ def add_virama_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
+class Literal:
+	def __init__(self, str):
+		self.str = str
+
+class Syllable(Literal):
+	pass
+
+class RightVowel(Literal):
+	pass
+
+class RightCons(Literal):
+	pass
+
+class RightTail(Literal):
+	pass
+
+class RightFrontalR(Literal):
+	pass
+
+class RightFrontalRAndTailM(Literal):
+	pass
+
+class LeftVowel(Literal):
+	pass
+
+class Space(Literal):
+	pass
+
+class LeftCons(Literal):
+	pass
+
+class Vowel(Literal):
+	pass
+
+class Virama(Literal):
+	pass
+
+a = Literal('a')
+b = Syllable('sa')
+
 # potential replacements (all codepoints extracted  from /ToUnicode objects in PDF files_:
 chars = {
-	'\u0020':			' ',		# space
-	'\u0022':			'-a',		# " vertical bar completing most syllables
-	'\u0023':			'.h',		# #
-	'\u0024':			'|',		# $
-	'\u0025':			'-.rr',		# %
-	'\u0026':			'.a',		# &
-	'\u0028':			'(',		# (
-	'\u0029':			')',		# )
-	'\u002a':			'*',		# *
-	'\u002b':			'+',		# +
-	'\u002c':			',',		# ,
-	'\u002d':			'-',		# -
-	'\u002e':			'.',		# .
-	'\u0030':			'0',		# 0
-	'\u0031':			'1',		# 1
-	'\u0032':			'2',		# 2
-	'\u0033':			'3',		# 3
-	'\u0034':			'4',		# 4
-	'\u0035':			'5',		# 5
-	'\u0036':			'6',		# 6
-	'\u0037':			'7',		# 7
-	'\u0038':			'8',		# 8
-	'\u0039':			'9',		# 9
-	'\u003b':			';',		# ;
-	'\u003c':			'i-',		# <
-	'\u003e':			'',			# >	(spacing)
-	'\u003f':			'?',		# ?
-	'\u0040':			'ka',		# @
-	'\u0041':			'kh-',		# A
-	'\u0042':			'g-',		# B
-	'\u0043':			'gh-',		# C
-	'\u0044':			'"n',		# D
-	'\u0045':			'c-',		# E
-	'\u0046':			'cha',		# F
-	'\u0047':			'j-',		# G
-	'\u0049':			'~n-',		# I
-	'\u004a':			'.ta',		# J
-	'\u004b':			'.tha',		# K
-	'\u004c':			'.da',		# L
-	'\u004d':			'.dha',		# M
-	'\u004e':			'.n-',		# N
-	'\u004f':			't-',		# O
-	'\u0050':			'th-',		# P
-	'\u0051':			'da',		# Q
-	'\u0052':			'dh-',		# R
-	'\u0053':			'n-',		# S
-	'\u0054':			'p-',		# T
-	'\u0055':			'pha',		# U
-	'\u0056':			'b-',		# V
-	'\u0057':			'bh-',		# W
-	'\u0058':			'm-',		# X
-	'\u0059':			'y-',		# Y
-	'\u005a':			'ra',		# Z
-	'\u005b':			'la',		# [
-	'\u005c':			'v-',		# \
-	'\u005d':			'"s-',		# ]
-	'\u005e':			'.s-',		# ^
-	'\u005f':			's-',		# _
-	'\u0060':			'ha',		# `
-	'\u0061':			'.la',		# a
-	'\u0062':			'k.s-',		# b
-	'\u0063':			'j~n-',		# c
-	'\u0064':			'"sra',		# d
-	'\u0065':			'tr-',		# e
-	'\u0066':			'tt-',		# f
-	'\u0068':			'.r',		# h U+0069 6a 6c might be .rr .l .ll?
-	'\u006c':			'-u',		# l what is different from  s?
-	'\u006d':			'-uu',		# m what is different from t?
-	'\u006e':			'-n',		# n	appears e.g. after '"' in pna
-	'\u006f':			'-_',		# o virama.
-	'\u0070':			'-aa',		# p
-	'\u0071':			'i-',		# q
-	'\u0072':			'-ii',		# r what is different from \u00ee?
-	'\u0073':			'-u',		# s what is different from l?
-	'\u0074':			'-uu',		# t what is different from m?
-	'\u0075':			'-e',		# u becomes part of -o as 'pu'
-	'\u0076':			'-ai',		# v becomes part of -au as 'pv'
-	'\u0077':			'-.r',		# w
-	'\u0078':			'-.rr',		# x ? (a guess; not seen yet)
-	'\u0079':			'-.l',		# y ? (a guess; not seen yet)
-	'\u007a':			'-.m',		# z
-	'\u007b':			'r-',		# { hook above line. adds r to the beginning of syllable
-	'\u007c':			'r-.m',		# | hook above + dot. adds r to the beginning and .m to the end
-	'\u007d':			'-r',		# } line from center to left-bottom
-	'\u007e':			'-r',		# ~ caret below character (used for -r in syllables not ending with bar)
-	'\u00a0':			'pt-',		# NBSP
-	'\u00a8':			'dbha',		# ¨
-	'\u00a9':			'dda',		# ©
-	'\u00ae':			'dba',		# ®
-	'\u00b0':			'',			# ° (spacing e.g. after ka, ruu)
-	'\u00b1':			'kla',		# ±
-	'\u00b4':			'ddha',		# ´
-	'\u00b5':			'"nkta',	# µ
-	'\u00b7':			'ruu',		# ·
-	'\u00bb':			'kka',		# »
-	'\u00c1':			'dra',		# Á
-	'\u00c2':			'hya',		# Â
-	'\u00c4':			'~nj-',		# Ä
-	'\u00c5':			'~nc-',		# Å
-	'\u00c6':			'stra',		# Æ
-	'\u00c7':			'cc-',		# Ç
-	'\u00c8':			'.thya',	# È (.ttha? unlikely)
-	'\u00c9':			'jj-',		# É
-	'\u00cb':			'.tya',		# Ë
-	'\u00cc':			'u',		# Ì ?
-	'\u00cf':			'a',		# Ï
-	'\u00d1':			'lla',		# Ñ
-	'\u00d3':			'uu',		# Ó ?
-	'\u00d4':			'e',		# Ô
-	'\u00d5':			'.s.ta',	# Õ
-	'\u00d6':			'hna',		# Ö
-	'\u00da':			'i',		# Ú
-	'\u00dc':			'h.na',		# Ü
-	'\u00e0':			'hva',		# à
-	'\u00e1':			'hla',		# á
-	'\u00e3':			'"nkha',	# ã
-	'\u00e4':			'"nka',		# ä
-	'\u00e5':			'"nga',		# å
-	'\u00e6':			'sra',		# æ
-	'\u00e7':			'"ngha',	# ç
-	'\u00e8':			'"nk.sa',	# è
-	'\u00e9':			'"nma',		# é
-	'\u00eb':			'\u2018', 	# U+2018 left single quotation mark
-	'\u00ec':			'i-',		# ì
-	'\u00ed':			'\u2019',	# U+2019 right single quotation mark
-	'\u00ee':			'-ii',		# î what is different from 'r'?
-	'\u00f1':			'\u2013',	# ñ –, en-dash
-	'\u00f2':			'kta',		# ò
-	'\u00f3':			'\u2014',	# ó —, em-dash
-	'\u00f9':			'dya',		# ù
-	'\u00fb':			'dga',		# û
-	'\u00fc':			'dva',		# ü
-	'\u00ff':			'ch-',		# ÿ
-	'\u0152':			'.s.tha',	# Œ
-	'\u0153':			'hm-',		# œ
-	'\u02c6':			'-n',		# ˆ ?
-	'\u02dc':			'-ya',		# ˜
-	'\u2013':			'gn-',		# –
-	'\u2014':			'tn-',		# —
-	'\u201a':			'h.r',		# ‚
-	'\u201c':			'kt-',		# “
-	'\u201e':			'hra',		# „
-	'\u2021':			'ru',		# ‡
-	'\u2026':			'kva',		# …
-	'\u2044':			'l-',		# ⁄
-	'\u2122':			'd.r',		# ™ ?
-	'\u2206':			'"sc-',		# ∆
-	'\u221a':			'sna',		# √
-	'\u221e':			'dbra',		# ∞ ?
-	'\u2260':			'dma',		# ≠
-	'\u2264':			'"nkra',	# ≤
-	'\u2265':			'"ngra',	# ≥
-	'\u25ca':			'k-',		# ◊
-	'\ufb02':			'nn-',		# ﬂ
+	'\u000a':			Literal('\n'),			# newline
+	'\u000c':			Literal('\f'),			# formfeed (new page)
+	'\u0020':			Literal(' '),			# space
+	'\u0022':			RightVowel('a'),		# " vertical bar completing most syllables
+	'\u0023':			Syllable('.h'),			# #
+	'\u0024':			Literal('|'),			# $
+	'\u0025':			RightVowel('.rr'),		# %
+	'\u0026':			Literal('.a'),			# &
+	'\u0028':			Literal('('),			# (
+	'\u0029':			Literal(')'),			# )
+	'\u002a':			Literal('*'),			# *
+	'\u002b':			Literal('+'),			# +
+	'\u002c':			Literal(','),			# ,
+	'\u002d':			Literal('-'),			# -
+	'\u002e':			Literal('.'),			# .
+	'\u0030':			Literal('0'),			# 0
+	'\u0031':			Literal('1'),			# 1
+	'\u0032':			Literal('2'),			# 2
+	'\u0033':			Literal('3'),			# 3
+	'\u0034':			Literal('4'),			# 4
+	'\u0035':			Literal('5'),			# 5
+	'\u0036':			Literal('6'),			# 6
+	'\u0037':			Literal('7'),			# 7
+	'\u0038':			Literal('8'),			# 8
+	'\u0039':			Literal('9'),			# 9
+	'\u003b':			Literal(';'),			# ;
+	'\u003c':			LeftVowel('i'),			# <
+	'\u003e':			Space(''),				# >	(spacing)
+	'\u003f':			Literal('?'),			# ?
+	'\u0040':			Syllable('ka'),			# @
+	'\u0041':			LeftCons('kh'),			# A
+	'\u0042':			LeftCons('g'),			# B
+	'\u0043':			LeftCons('gh'),			# C
+	'\u0044':			Syllable('"n'),			# D
+	'\u0045':			LeftCons('c'),			# E
+	'\u0046':			Syllable('cha'),		# F
+	'\u0047':			LeftCons('j'),			# G
+	'\u0049':			LeftCons('~n'),			# I
+	'\u004a':			Syllable('.ta'),		# J
+	'\u004b':			Syllable('.tha'),		# K
+	'\u004c':			Syllable('.da'),		# L
+	'\u004d':			Syllable('.dha'),		# M
+	'\u004e':			LeftCons('.n'),			# N
+	'\u004f':			LeftCons('t'),			# O
+	'\u0050':			LeftCons('th'),			# P
+	'\u0051':			Syllable('da'),			# Q
+	'\u0052':			LeftCons('dh'),			# R
+	'\u0053':			LeftCons('n'),			# S
+	'\u0054':			LeftCons('p'),			# T
+	'\u0055':			Syllable('pha'),		# U
+	'\u0056':			LeftCons('b'),			# V
+	'\u0057':			LeftCons('bh'),			# W
+	'\u0058':			LeftCons('m'),			# X
+	'\u0059':			LeftCons('y'),			# Y
+	'\u005a':			Syllable('ra'),			# Z
+	'\u005b':			Syllable('la'),			# [
+	'\u005c':			LeftCons('v'),			# \
+	'\u005d':			LeftCons('"s'),			# ]
+	'\u005e':			LeftCons('.s'),			# ^
+	'\u005f':			LeftCons('s'),			# _
+	'\u0060':			Syllable('ha'),			# `
+	'\u0061':			Syllable('.la'),		# a
+	'\u0062':			LeftCons('k.s'),		# b
+	'\u0063':			LeftCons('j~n'),		# c
+	'\u0064':			Syllable('"sra'),		# d
+	'\u0065':			LeftCons('tr'),		# e
+	'\u0066':			LeftCons('tt'),		# f
+	'\u0068':			Vowel('.r'),			# h U+0069 6a 6c might be .rr .l .ll?
+	'\u006c':			RightVowel('u'),		# l what is different from  s?
+	'\u006d':			RightVowel('uu'),		# m what is different from t?
+	'\u006e':			RightCons('n'),			# n	appears e.g. after '"' in pna
+	'\u006f':			Virama('_'),			# o virama.
+	'\u0070':			RightVowel('aa'),		# p
+	'\u0071':			LeftVowel('i'),			# q
+	'\u0072':			RightVowel('ii'),		# r what is different from \u00ee?
+	'\u0073':			RightVowel('u'),		# s what is different from l?
+	'\u0074':			RightVowel('uu'),		# t what is different from m?
+	'\u0075':			RightVowel('e'),		# u becomes part of -o as 'pu'
+	'\u0076':			RightVowel('ai'),		# v becomes part of -au as 'pv'
+	'\u0077':			RightVowel('.r'),		# w 78 and 79 might be -.rr and -.l or -.l and -.ll
+	'\u007a':			Syllable('.m'),			# z
+	'\u007b':			RightFrontalR('r'),		# { hook above line. adds r to the beginning of syllable
+	'\u007c':			RightFrontalRAndTailM('r-.m'),	# | hook above + dot. adds r to the beginning and .m to the end
+	'\u007d':			RightCons('-r'),		# } line from center to left-bottom
+	'\u007e':			RightCons('-r'),		# ~ caret below character (used for -r in syllables not ending with bar)
+	'\u00a0':			LeftCons('pt-'),		# NBSP
+	'\u00a8':			Syllable('dbha'),		# ¨
+	'\u00a9':			Syllable('dda'),		# ©
+	'\u00ae':			Syllable('dba'),		# ®
+	'\u00b0':			Space(''),				# ° (spacing e.g. after ka, ruu)
+	'\u00b1':			Syllable('kla'),		# ±
+	'\u00b4':			Syllable('ddha'),		# ´
+	'\u00b5':			Syllable('"nkta'),		# µ
+	'\u00b7':			Syllable('ruu'),		# ·
+	'\u00bb':			Syllable('kka'),		# »
+	'\u00c1':			Syllable('dra'),		# Á
+	'\u00c2':			Syllable('hya'),		# Â
+	'\u00c4':			LeftCons('~nj-'),		# Ä
+	'\u00c5':			LeftCons('~nc-'),		# Å
+	'\u00c6':			Syllable('stra'),		# Æ
+	'\u00c7':			LeftCons('cc-'),		# Ç
+	'\u00c8':			Syllable('.thya'),		# È (.ttha? unlikely)
+	'\u00c9':			LeftCons('jj-'),		# É
+	'\u00cb':			Syllable('.tya'),		# Ë
+	'\u00cc':			Vowel('u'),				# Ì ?
+	'\u00cf':			Vowel('a'),				# Ï
+	'\u00d1':			Syllable('lla'),		# Ñ
+	'\u00d3':			Vowel('uu'),			# Ó ?
+	'\u00d4':			Vowel('e'),				# Ô
+	'\u00d5':			Syllable('.s.ta'),		# Õ
+	'\u00d6':			Syllable('hna'),		# Ö
+	'\u00da':			Vowel('i'),				# Ú
+	'\u00dc':			Syllable('h.na'),		# Ü
+	'\u00e0':			Syllable('hva'),		# à
+	'\u00e1':			Syllable('hla'),		# á
+	'\u00e3':			Syllable('"nkha'),		# ã
+	'\u00e4':			Syllable('"nka'),		# ä
+	'\u00e5':			Syllable('"nga'),		# å
+	'\u00e6':			Syllable('sra'),		# æ
+	'\u00e7':			Syllable('"ngha'),		# ç
+	'\u00e8':			Syllable('"nk.sa'),		# è
+	'\u00e9':			Syllable('"nma'),		# é
+	'\u00eb':			Literal('\u2018'), 		# U+2018 left single quotation mark
+	'\u00ec':			LeftVowel('i'),			# ì
+	'\u00ed':			Literal('\u2019'),		# U+2019 right single quotation mark
+	'\u00ee':			RightVowel('-ii'),		# î what is different from 'r'?
+	'\u00f1':			Literal('\u2013'),		# ñ –, en-dash
+	'\u00f2':			Syllable('kta'),		# ò
+	'\u00f3':			Literal('\u2014'),		# ó —, em-dash
+	'\u00f9':			Syllable('dya'),		# ù
+	'\u00fb':			Syllable('dga'),		# û
+	'\u00fc':			Syllable('dva'),		# ü
+	'\u00ff':			LeftCons('ch-'),		# ÿ
+	'\u0152':			Syllable('.s.tha'),		# Œ
+	'\u0153':			LeftCons('hm-'),		# œ
+	'\u02c6':			RightCons('-n'),		# ˆ ?
+	'\u02dc':			RightCons('-ya'),		# ˜
+	'\u2013':			LeftCons('gn-'),		# –
+	'\u2014':			LeftCons('tn-'),		# —
+	'\u201a':			Syllable('h.r'),		# ‚
+	'\u201c':			LeftCons('kt-'),		# “
+	'\u201e':			Syllable('hra'),		# „
+	'\u2021':			Syllable('ru'),			# ‡
+	'\u2026':			Syllable('kva'),		# …
+	'\u2044':			LeftCons('l-'),			# ⁄
+	'\u2122':			Syllable('d.r'),		# ™ ?
+	'\u2206':			LeftCons('"sc-'),		# ∆
+	'\u221a':			Syllable('sna'),		# √
+	'\u221e':			Syllable('dbra'),		# ∞ ?
+	'\u2260':			Syllable('dma'),		# ≠
+	'\u2264':			Syllable('"nkra'),		# ≤
+	'\u2265':			Syllable('"ngra'),		# ≥
+	'\u25ca':			LeftCons('k-'),			# ◊
+	'\ufb02':			LeftCons('nn-'),		# ﬂ
 }
 
+spacing_chars = [c for c in chars if isinstance(chars[c], Space) ]
+
 repl = {
-	'@w':				'k.r',
-	'@z':				'ka.m',
-	'@\u00b0':			'ka',
+	'@':				'ka',
 	'A"':				'kha',
 	'B"':				'ga',
 	'E"':				'ca',
@@ -262,8 +302,6 @@ for k, v in repl.items():
 
 repl_trailing = {
 	'l':	'u',
-	'pu':	'o',
-	'pv':	'au',
 	'p':	'aa',
 	'r':	'ii',
 	's':	'u',
@@ -299,30 +337,28 @@ def add_before_last_vowel(what, syllable):
 	return syllable + what + vowels
 
 def handle_trailing_vowels_and_r(line, repl_to):
-	while True:
-		got3 = line[0:3] in repl_trailing
-		got2 = line[0:2] in repl_trailing
-		if got3 or got2 or line[0:1] in repl_trailing:
-			from_trailing = line[0:3] if got3 else line[0:2] if got2 else line[0:1]
-			repl_to = repl_to[:-1] + repl_trailing[from_trailing]
-			line = line[len(from_trailing):]
+	while line:
+		c = line[0]
+		if c in repl_trailing:
+			repl_to = repl_to[:-1] + repl_trailing[c]
+			if repl_to.endswith('ae'):
+				repl_to = repl_to[:-2] + 'o'
+			elif repl_to.endswith('aai'):
+				repl_to = repl_to[:-3] + 'au'
 		# add frontal "r" as in rvi, rva
-		elif line[0:1] == '{':
+		elif c == '{':
 			repl_to = 'r' + repl_to
-			line = line[1:]
 		# add trailing "r" as in grii, gra
-		elif line[0:1] == '}':
+		elif c == '}':
 			repl_to = add_before_last_vowel('r', repl_to)
-			line = line[1:]
 		# r-...-.m as combined as a single char
-		elif line[0:1] == '|':
+		elif c == '|':
 			repl_to = 'r' + repl_to + '.m'
-			line = line[1:]
-		# used as spacing after e.g. .s.t or .dha
-		elif line[0:1] == '>':
-			line = line[1:]
+		elif c in spacing_chars:
+			pass
 		else:
 			break
+		line = line[1:]
 	return line, repl_to
 
 def decodeline(line):
