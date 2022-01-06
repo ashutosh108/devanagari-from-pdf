@@ -17,40 +17,64 @@ def add_virama_rules(dic):
 			new[new_from] = new_to
 	return {**new, **dic}
 
+# 'Literal' and derived classes are only used in chars array below. They are
+# used to denote type of each entry so we can easily filter them by type.
+
+# char to be replaced by literal string as given, not other handling required.
+# e.g. digits, '.', etc
 class Literal:
 	def __init__(self, str):
 		self.str = str
 
+# represents char which denotes complete syllable which can optionally be
+# appended with some trailing chars
 class Syllable(Literal):
 	pass
 
+# represents vowel which is to replace whatever trailing vowel we have already
+# "vowel which is the right half of simple syllable"
+# e.g. -ii or -aa
 class RightVowel(Literal):
 	pass
 
+# consonant to be added on the right, but before vowels
+# e.g. -r
 class RightCons(Literal):
 	pass
 
-class RightTail(Literal):
-	pass
-
+# this char code is appended on the right, but 'r' must be added *in front* of
+# the syllable
 class RightFrontalR(Literal):
 	pass
 
+# like RightFrontalR but also add .m to the end
 class RightFrontalRAndTailM(Literal):
 	pass
 
+# char code happens in the beginning of syllable, but represents '-i' to be
+# appended to the syllable.  Only 'i', but it comes in three different codes
+# for three different arc lenghts.
 class LeftVowel(Literal):
 	pass
 
+# not a real space, but a spacing character used by original layout program to
+# adjust characters properly. We simply ignore them at the end of each
+# syllable.
+# e.g. '>'
 class Space(Literal):
 	pass
 
+# 'left half os syllable, a consonant'
+# e.g. kh-
 class LeftCons(Literal):
 	pass
 
+# complete vowel when it stands separately
+# e.g. 'a' or 'i'
 class Vowel(Literal):
 	pass
 
+# We need special handling for Virama, so mark it separately
 class Virama(Literal):
 	pass
 
@@ -217,61 +241,17 @@ chars = {
 
 spacing_chars = [c for c in chars if isinstance(chars[c], Space) ]
 
-syllables = {
-	'@':				'ka',
-	'A"':				'kha',
-	'B"':				'ga',
-	'E"':				'ca',
-	'G"':				'ja',
-	'M':				'.dha', # always 'M>' but '>' is just spacing
-	'N"':				'.na',
-	'O"':				'ta',
-	'P"':				'tha',
-	'Q':				'da',
-	'R"':				'dha',
-	'S"':				'na',
-	'T"':				'pa',
-	'V"':				'ba',
-	'W"':				'bha',
-	'X"':				'ma',
-	'Y"':				'ya',
-	'Z':				'ra',
-	'[':				'la',
-	'\\"':				'va',
-	']"':				'"sa',
-	'^"':				'.sa',
-	'_"':				'sa',
-	'`':				'ha',
-	'b"':				'k.sa',
-	'c"':				'j~na',
-	'd':				'"sra',
-	'e"':				'tra',
-	'z':				'.m',
-	'\u00a0"':			'pta',
-	'\u00b4':			'ddha',
-	'\u00c2':			'hya',
-	'\u00c5"':			'~nca',
-	'\u00c7"':			'cca',
-	'\u00c9"':			'jja',
-	'\u00d5':			'.s.ta',
-	'\u00e4':			'"nka',
-	'\u00e6':			'sra',
-	'\u00f2':			'kta',
-	'\u00f9':			'dya',
-	'\u00fc':			'dva',
-	'\u0153"':			'hma',
-	'\u2014"':			'tna',
-	'\u201a':			'h.r',
-	'\u2206"':			'"sca',
-	'\ufb02"':			'nna',
-}
-# syllables = {}
-# for code, syl in chars.items():
-# 	if isinstance(syl, LeftCons):
-# 		syllables[code + '"'] = syl.str + 'a'
-# 	elif isinstance(syl, Syllable):
-# 		syllables[code] = syl.str
+syllables = {}
+for code, syl in chars.items():
+	if isinstance(syl, LeftCons):
+		syllables[code + '"'] = syl.str + 'a'
+	elif isinstance(syl, Syllable):
+		syllables[code] = syl.str
 syllables = add_virama_rules(syllables)
+
+#for code, syl in chars.items():
+#	if isinstance(syl, Literal):
+#		syllables[code] = syl.str
 syllables = add_unchanging_letters(syllables)
 
 # avoid replicating these special rules to "aa", "ii", halant etc
@@ -289,7 +269,6 @@ syllables['\u00eb'] = '\u2018' # U+2018 left single quotation mark
 syllables['\u00ed'] = '\u2019' # U+2019 right single quotation mark
 syllables['\u00f1'] = '—'
 syllables['\u2021'] = 'ru'
-syllables['\u00b0'] = '' # spacing after e.g. 'ka'
 
 # letters modifying the following syllable
 repl_prefix = {
