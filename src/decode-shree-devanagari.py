@@ -63,7 +63,7 @@ chars = {
 	'\u000c':			Literal('\f'),			# formfeed (new page)
 	'\u0020':			Literal(' '),			# space
 	'\u0022':			RightVowel('a'),		# " vertical bar completing most syllables
-	'\u0023':			Syllable('.h'),			# #
+	'\u0023':			Literal('.h'),			# #
 	'\u0024':			Literal('|'),			# $
 	'\u0025':			RightVowel('.rr'),		# %
 	'\u0026':			Literal('.a'),			# &
@@ -124,8 +124,8 @@ chars = {
 	'\u0062':			LeftCons('k.s'),		# b
 	'\u0063':			LeftCons('j~n'),		# c
 	'\u0064':			Syllable('"sra'),		# d
-	'\u0065':			LeftCons('tr'),		# e
-	'\u0066':			LeftCons('tt'),		# f
+	'\u0065':			LeftCons('tr'),			# e
+	'\u0066':			LeftCons('tt'),			# f
 	'\u0068':			Vowel('.r'),			# h U+0069 6a 6c might be .rr .l .ll?
 	'\u006c':			RightVowel('u'),		# l what is different from  s?
 	'\u006d':			RightVowel('uu'),		# m what is different from t?
@@ -144,7 +144,7 @@ chars = {
 	'\u007c':			RightFrontalRAndTailM('r-.m'),	# | hook above + dot. adds r to the beginning and .m to the end
 	'\u007d':			RightCons('-r'),		# } line from center to left-bottom
 	'\u007e':			RightCons('-r'),		# ~ caret below character (used for -r in syllables not ending with bar)
-	'\u00a0':			LeftCons('pt-'),		# NBSP
+	'\u00a0':			LeftCons('pt'),			# NBSP
 	'\u00a8':			Syllable('dbha'),		# ¨
 	'\u00a9':			Syllable('dda'),		# ©
 	'\u00ae':			Syllable('dba'),		# ®
@@ -156,12 +156,12 @@ chars = {
 	'\u00bb':			Syllable('kka'),		# »
 	'\u00c1':			Syllable('dra'),		# Á
 	'\u00c2':			Syllable('hya'),		# Â
-	'\u00c4':			LeftCons('~nj-'),		# Ä
-	'\u00c5':			LeftCons('~nc-'),		# Å
+	'\u00c4':			LeftCons('~nj'),		# Ä
+	'\u00c5':			LeftCons('~nc'),		# Å
 	'\u00c6':			Syllable('stra'),		# Æ
-	'\u00c7':			LeftCons('cc-'),		# Ç
+	'\u00c7':			LeftCons('cc'),			# Ç
 	'\u00c8':			Syllable('.thya'),		# È (.ttha? unlikely)
-	'\u00c9':			LeftCons('jj-'),		# É
+	'\u00c9':			LeftCons('jj'),			# É
 	'\u00cb':			Syllable('.tya'),		# Ë
 	'\u00cc':			Vowel('u'),				# Ì ?
 	'\u00cf':			Vowel('a'),				# Ï
@@ -191,33 +191,33 @@ chars = {
 	'\u00f9':			Syllable('dya'),		# ù
 	'\u00fb':			Syllable('dga'),		# û
 	'\u00fc':			Syllable('dva'),		# ü
-	'\u00ff':			LeftCons('ch-'),		# ÿ
+	'\u00ff':			LeftCons('ch'),			# ÿ
 	'\u0152':			Syllable('.s.tha'),		# Œ
-	'\u0153':			LeftCons('hm-'),		# œ
+	'\u0153':			LeftCons('hm'),			# œ
 	'\u02c6':			RightCons('-n'),		# ˆ ?
 	'\u02dc':			RightCons('-ya'),		# ˜
-	'\u2013':			LeftCons('gn-'),		# –
-	'\u2014':			LeftCons('tn-'),		# —
+	'\u2013':			LeftCons('gn'),			# –
+	'\u2014':			LeftCons('tn'),			# —
 	'\u201a':			Syllable('h.r'),		# ‚
-	'\u201c':			LeftCons('kt-'),		# “
+	'\u201c':			LeftCons('kt'),			# “
 	'\u201e':			Syllable('hra'),		# „
 	'\u2021':			Syllable('ru'),			# ‡
 	'\u2026':			Syllable('kva'),		# …
-	'\u2044':			LeftCons('l-'),			# ⁄
+	'\u2044':			LeftCons('l'),			# ⁄
 	'\u2122':			Syllable('d.r'),		# ™ ?
-	'\u2206':			LeftCons('"sc-'),		# ∆
+	'\u2206':			LeftCons('"sc'),		# ∆
 	'\u221a':			Syllable('sna'),		# √
 	'\u221e':			Syllable('dbra'),		# ∞ ?
 	'\u2260':			Syllable('dma'),		# ≠
 	'\u2264':			Syllable('"nkra'),		# ≤
 	'\u2265':			Syllable('"ngra'),		# ≥
-	'\u25ca':			LeftCons('k-'),			# ◊
-	'\ufb02':			LeftCons('nn-'),		# ﬂ
+	'\u25ca':			LeftCons('k'),			# ◊
+	'\ufb02':			LeftCons('nn'),			# ﬂ
 }
 
 spacing_chars = [c for c in chars if isinstance(chars[c], Space) ]
 
-repl = {
+syllables = {
 	'@':				'ka',
 	'A"':				'kha',
 	'B"':				'ga',
@@ -230,7 +230,6 @@ repl = {
 	'Q':				'da',
 	'R"':				'dha',
 	'S"':				'na',
-	'T"n':				'pna',
 	'T"':				'pa',
 	'V"':				'ba',
 	'W"':				'bha',
@@ -257,7 +256,7 @@ repl = {
 	'\u00d5':			'.s.ta',
 	'\u00e4':			'"nka',
 	'\u00e6':			'sra',
-	'\u00f2z':			'kta.m',
+	'\u00f2':			'kta',
 	'\u00f9':			'dya',
 	'\u00fc':			'dva',
 	'\u0153"':			'hma',
@@ -266,31 +265,37 @@ repl = {
 	'\u2206"':			'"sca',
 	'\ufb02"':			'nna',
 }
-repl = add_virama_rules(repl)
-repl = add_unchanging_letters(repl)
+# syllables = {}
+# for code, syl in chars.items():
+# 	if isinstance(syl, LeftCons):
+# 		syllables[code + '"'] = syl.str + 'a'
+# 	elif isinstance(syl, Syllable):
+# 		syllables[code] = syl.str
+syllables = add_virama_rules(syllables)
+syllables = add_unchanging_letters(syllables)
 
 # avoid replicating these special rules to "aa", "ii", halant etc
-repl['#'] = '.h'
-repl['$'] = '|'
-repl['&'] = '.a'
-repl['\u00b7'] = 'ruu'
-repl['\u00cc'] = 'u';
-repl['\u00cfp'] = 'aa'
-repl['\u00cf'] = 'a'
-repl['\u00d4'] = 'e'
-repl['\u00da{'] = 'ii'
-repl['\u00da'] = 'i'
-repl['\u00eb'] = '\u2018' # U+2018 left single quotation mark
-repl['\u00ed'] = '\u2019' # U+2019 right single quotation mark
-repl['\u00f1'] = '—'
-repl['\u2021'] = 'ru'
-repl['\u00b0'] = '' # spacing after e.g. 'ka'
+syllables['#'] = '.h'
+syllables['$'] = '|'
+syllables['&'] = '.a'
+syllables['\u00b7'] = 'ruu'
+syllables['\u00cc'] = 'u';
+syllables['\u00cfp'] = 'aa'
+syllables['\u00cf'] = 'a'
+syllables['\u00d4'] = 'e'
+syllables['\u00da{'] = 'ii'
+syllables['\u00da'] = 'i'
+syllables['\u00eb'] = '\u2018' # U+2018 left single quotation mark
+syllables['\u00ed'] = '\u2019' # U+2019 right single quotation mark
+syllables['\u00f1'] = '—'
+syllables['\u2021'] = 'ru'
+syllables['\u00b0'] = '' # spacing after e.g. 'ka'
 
 # letters modifying the following syllable
 repl_prefix = {
 	'\u25ca':	'k',
 }
-for k, v in repl.items():
+for k, v in syllables.items():
 	if len(k)==2 and k[1] == '"':
 		if not (len(v) > 1 and v[-1] == 'a'):
 			raise Exception("wrong replacement pair found: '%s' => '%s' pattern ends on '\"', but replacement doesn't end on 'a'" % (k, v))
@@ -314,7 +319,7 @@ repl_trailing = {
 # optimization: group all entries by first char of it's key to make linear
 # search shorter.
 repl_for_letter = {}
-for k, v in repl.items():
+for k, v in syllables.items():
 	if k[0] in repl_for_letter:
 		repl_for_letter[k[0]][k] = v
 	else:
@@ -351,6 +356,8 @@ def handle_trailing_vowels_and_r(line, repl_to):
 		# add trailing "r" as in grii, gra
 		elif c == '}':
 			repl_to = add_before_last_vowel('r', repl_to)
+		elif c == 'n':
+			repl_to = add_before_last_vowel('n', repl_to)
 		# r-...-.m as combined as a single char
 		elif c == '|':
 			repl_to = 'r' + repl_to + '.m'
