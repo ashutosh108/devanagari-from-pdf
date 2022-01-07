@@ -337,6 +337,7 @@ def fix_common_letter_spacing_problems(line):
 	# S"pX"n\v "
 	# S"pX"nv\"
 	line = line.replace('\\v ', 'v\\')
+	line = line.replace('\\u ', 'u\\')
 
 	# ojastejodyutidhara.h: -r moves before -u, fix it
 	# ÏpuG"_O"uG"puù<s O"R"Z#
@@ -347,11 +348,17 @@ def fix_common_letter_spacing_problems(line):
 	# \"rO"X"pu`qv Z<O"
 	# \"rO"X"pu`vqZ<O"
 	line = line.replace('qv ', 'vq')
+	line = line.replace('qu ', 'uq')
 
 	# vyaapnoti: -i moves before -e (which is used as part of -o here)
 	# \Y"pT"np<u O"
 	# \Y"pT"npu<O"
 	line = line.replace('<u ', 'u<')
+
+	#vedairvi: -i moved before -ai
+	#\"uQ<v \"{
+	#\"uQ<v\"{
+	line = line.replace('<v ', 'v<')
 
 	# sarvadu.s.tanibarha.naaya: -u moved after .s.t, -i moved, spaces added.
 	# We fix this, but it looks really custom. Would be nice to figure out a
