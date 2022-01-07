@@ -374,6 +374,12 @@ def fix_common_letter_spacing_problems(line):
 	line = line.replace('_z ', 'z_')
 	line = line.replace('q{ ', '{q')
 
+	#caturmmuurtti"scaturbaahu-
+	#E"O"sXX"t<{ f"{∆"O"sV"p{`-l
+	#E"O"sXX"t{<f"{∆"O"sV"p{`l-
+	line = line.replace('<{ ', '{<')
+	line = line.replace('-l', 'l-')
+
 	return line
 
 def decodeline(line):
