@@ -1,15 +1,6 @@
 #!/bin/env python3
 import argparse
 
-def add_virama_rules(dic):
-	new = {}
-	for f, t in dic.items():
-		if len(t) > 1 and t.endswith('a') and not t.endswith('aa'):
-			new_from = f + 'o'
-			new_to = t[:-1]
-			new[new_from] = new_to
-	return {**new, **dic}
-
 # 'Literal' and derived classes are only used in chars array below. They are
 # used to denote type of each entry so we can easily filter them by type.
 
@@ -68,10 +59,6 @@ class LeftCons(CharType):
 # complete vowel when it stands separately
 # e.g. 'a' or 'i'
 class Vowel(CharType):
-	pass
-
-# We need special handling for Virama, so mark it separately
-class Virama(CharType):
 	pass
 
 # potential replacements (all codepoints extracted  from /ToUnicode objects in PDF files_:
@@ -156,7 +143,7 @@ chars = {
 	'\u006c':			RightVowel('u'),		# l what is different from  s?
 	'\u006d':			RightVowel('uu'),		# m what is different from t?
 	'\u006e':			RightCons('n'),			# n	appears e.g. after '"' in pna
-	'\u006f':			Virama('_'),			# o virama.
+	'\u006f':			RightVowel(''),			# o virama. Kind of cheaty to declare it as a 'RightVowel' bit it works
 	'\u0070':			RightVowel('aa'),		# p
 	'\u0071':			LeftVowel('i'),			# q
 	'\u0072':			RightVowel('ii'),		# r what is different from \u00ee?
@@ -253,6 +240,8 @@ chars = {
 	'\ufb02':			LeftCons('nn'),			# ﬂ
 }
 
+# Create separate associative arrays for each character type. e.g. all
+# Vowel('') go to vowels[].
 for code, syl in chars.items():
 	array_name = type(syl).__name__.lower() + 's'
 	if array_name not in globals():
@@ -261,7 +250,6 @@ for code, syl in chars.items():
 	
 for code, syl in leftconss.items():
 	syllables[code + '"'] = syl + 'a'
-syllables = add_virama_rules(syllables)
 syllables |= literals
 syllables |= vowels
 
