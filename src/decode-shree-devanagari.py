@@ -184,7 +184,7 @@ chars = {
 	'\u00c9':			LeftCons('jj'),			# É
 	'\u00cb':			Syllable('.tya'),		# Ë
 	'\u00cc':			Vowel('u'),				# Ì ?
-	'\u00cd':			Literal('[???]'),		# Í
+	'\u00cd':			Syllable('.dya'),		# Í
 	'\u00cf':			Vowel('a'),				# Ï
 	'\u00d1':			Syllable('lla'),		# Ñ
 	'\u00d3':			Vowel('uu'),			# Ó ?
