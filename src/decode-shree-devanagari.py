@@ -211,7 +211,7 @@ chars = {
 	'\u00f3':			Literal('\u2015'),		# ó ―, horizontal bar (dash longer than em dash)
 	'\u00f4':			Syllable('.t.ta'),		# ô
 	'\u00f5':			Syllable('.d.da'),		# õ
-	'\u00f7':			Literal('[???]'),		# ÷
+	'\u00f7':			LeftCons('str'),		# ÷ as in stryeva
 	'\u00f9':			Syllable('dya'),		# ù
 	'\u00fb':			Syllable('dga'),		# û
 	'\u00fc':			Syllable('dva'),		# ü
