@@ -57,7 +57,7 @@ class LeftVowel(CharType):
 # adjust characters properly. We simply ignore them at the end of each
 # syllable.
 # e.g. '>'
-class Space(CharType):
+class Spacing(CharType):
 	pass
 
 # 'left half os syllable, a consonant'
@@ -103,7 +103,7 @@ chars = {
 	'\u0039':			Literal('9'),			# 9
 	'\u003b':			Literal(';'),			# ;
 	'\u003c':			LeftVowel('i'),			# <
-	'\u003e':			Space(''),				# >	(spacing)
+	'\u003e':			Spacing(''),			# >	(spacing)
 	'\u003f':			Literal('?'),			# ?
 	'\u0040':			Syllable('ka'),			# @
 	'\u0041':			LeftCons('kh'),			# A
@@ -159,13 +159,13 @@ chars = {
 	'\u007a':			Syllable('.m'),			# z
 	'\u007b':			RightFrontalR('r'),		# { hook above line. adds r to the beginning of syllable
 	'\u007c':			RightFrontalRAndTailM('r-.m'),	# | hook above + dot. adds r to the beginning and .m to the end
-	'\u007d':			RightCons('-r'),		# } line from center to left-bottom
-	'\u007e':			RightCons('-r'),		# ~ caret below character (used for -r in syllables not ending with bar)
+	'\u007d':			RightCons('r'),			# } line from center to left-bottom
+	'\u007e':			RightCons('r'),			# ~ caret below character (used for -r in syllables not ending with bar)
 	'\u00a0':			LeftCons('pt'),			# NBSP
 	'\u00a8':			Syllable('dbha'),		# ¨
 	'\u00a9':			Syllable('dda'),		# ©
 	'\u00ae':			Syllable('dba'),		# ®
-	'\u00b0':			Space(''),				# ° (spacing e.g. after ka, ruu)
+	'\u00b0':			Spacing(''),			# ° (spacing e.g. after ka, ruu)
 	'\u00b1':			Syllable('kla'),		# ±
 	'\u00b4':			Syllable('ddha'),		# ´
 	'\u00b5':			Syllable('"nkta'),		# µ
@@ -211,8 +211,8 @@ chars = {
 	'\u00ff':			LeftCons('ch'),			# ÿ
 	'\u0152':			Syllable('.s.tha'),		# Œ
 	'\u0153':			LeftCons('hm'),			# œ
-	'\u02c6':			RightCons('-n'),		# ˆ ?
-	'\u02dc':			RightCons('-ya'),		# ˜
+	'\u02c6':			RightCons('n'),			# ˆ ?
+	'\u02dc':			RightCons('ya'),		# ˜
 	'\u2013':			LeftCons('gn'),			# –
 	'\u2014':			LeftCons('tn'),			# —
 	'\u201a':			Syllable('h.r'),		# ‚
@@ -232,36 +232,17 @@ chars = {
 	'\ufb02':			LeftCons('nn'),			# ﬂ
 }
 
-spacing_chars = [c for c in chars if isinstance(chars[c], Space) ]
-
-syllables = {}
 for code, syl in chars.items():
-	if isinstance(syl, LeftCons):
-		syllables[code + '"'] = syl.str + 'a'
-	elif isinstance(syl, Syllable):
-		syllables[code] = syl.str
+	array_name = type(syl).__name__.lower() + 's'
+	if array_name not in globals():
+		globals()[array_name] = {}
+	globals()[array_name][code] = syl.str
+	
+for code, syl in leftconss.items():
+	syllables[code + '"'] = syl + 'a'
 syllables = add_virama_rules(syllables)
-
-for code, syl in chars.items():
-	if isinstance(syl, Literal) or isinstance(syl, Vowel):
-		syllables[code] = syl.str
-
-# letters modifying the following syllable
-repl_prefix = {}
-for code, syl in chars.items():
-	if isinstance(syl, LeftCons):
-		repl_prefix[code] = syl.str
-
-repl_trailing = {
-	'l':	'u',
-	'p':	'aa',
-	'r':	'ii',
-	's':	'u',
-	't':	'uu',
-	'u':	'e',
-	'v':	'ai',
-	'w':	'.r',
-}
+syllables |= literals
+syllables |= vowels
 
 # optimization: group all entries by first char of it's key to make linear
 # search shorter.
@@ -274,10 +255,7 @@ for k, v in syllables.items():
 
 def handle_i_modifier(i_modifier, repl_to):
 	if i_modifier:
-		if repl_to.endswith('a') and len(repl_to) > 1 and repl_to[-2] in "tdhmknyvpljbcsr":
-			repl_to = repl_to[:-1] + 'i'
-		else:
-			raise Exception("i modifier before unsupported replacement: '%s' => '%s'" % (repl_from, repl_to))
+		repl_to = repl_to[:-1] + 'i'
 	i_modifier = False
 	return i_modifier, repl_to
 
@@ -291,27 +269,26 @@ def add_before_last_vowel(what, syllable):
 def handle_trailing_vowels_and_r(line, repl_to):
 	while line:
 		c = line[0]
-		if c in repl_trailing:
-			repl_to = repl_to[:-1] + repl_trailing[c]
+		if c in rightvowels:
+			repl_to = repl_to[:-1] + rightvowels[c]
 			if repl_to.endswith('ae'):
 				repl_to = repl_to[:-2] + 'o'
 			elif repl_to.endswith('aai'):
 				repl_to = repl_to[:-3] + 'au'
 		# add frontal "r" as in rvi, rva
-		elif c == '{':
+		elif c in rightfrontalrs:
+			# however, 'ii' is written as combination of 'i' and 'r hook'
 			if repl_to == 'i':
 				repl_to = 'ii'
 			else:
 				repl_to = 'r' + repl_to
 		# add trailing "r" as in grii, gra
-		elif c == '}':
-			repl_to = add_before_last_vowel('r', repl_to)
-		elif c == 'n':
-			repl_to = add_before_last_vowel('n', repl_to)
+		elif c in rightconss:
+			repl_to = add_before_last_vowel(rightconss[c], repl_to)
 		# r-...-.m as combined as a single char
-		elif c == '|':
+		elif c in rightfrontalrandtailms:
 			repl_to = 'r' + repl_to + '.m'
-		elif c in spacing_chars:
+		elif c in spacings:
 			pass
 		else:
 			break
@@ -339,11 +316,11 @@ def decodeline(line):
 					break
 		if continue2:
 			continue
-		if line[0] in repl_prefix:
-			add_consonants_before_syllable += repl_prefix[line[0]]
+		if line[0] in leftconss:
+			add_consonants_before_syllable += leftconss[line[0]]
 			line = line[1:]
 			continue
-		if line[0] == '<' or line[0] == 'q' or line[0] == '\u00ec':
+		if line[0] in leftvowels:
 			i_modifier = True
 			line = line[1:]
 			continue
