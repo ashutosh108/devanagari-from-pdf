@@ -259,9 +259,12 @@ def handle_i_modifier(i_modifier, repl_to):
 	i_modifier = False
 	return i_modifier, repl_to
 
+# TODO: probably should process .r, .rr, .l and .ll vowels as well, but would
+# be nice to see an actual example of one of them before impleneting to make
+# sure it really works
 def add_before_last_vowel(what, syllable):
 	vowels=''
-	while syllable[-1:] in "aeiou":
+	while syllable and syllable[-1] in "aeiou":
 		vowels += syllable[-1:]
 		syllable = syllable[:-1]
 	return syllable + what + vowels
