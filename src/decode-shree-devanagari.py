@@ -84,6 +84,7 @@ chars = {
 	'\u0024':			Literal('|'),			# $
 	'\u0025':			RightVowel('.rr'),		# %
 	'\u0026':			Literal('.a'),			# &
+	'\u0027':			Literal('[???]'),		# '
 	'\u0028':			Literal('('),			# (
 	'\u0029':			Literal(')'),			# )
 	'\u002a':			Literal('*'),			# *
@@ -91,6 +92,7 @@ chars = {
 	'\u002c':			Literal(','),			# ,
 	'\u002d':			Literal('-'),			# -
 	'\u002e':			Literal('.'),			# .
+	'\u002f':			Literal('[???]'),		# /
 	'\u0030':			Literal('0'),			# 0
 	'\u0031':			Literal('1'),			# 1
 	'\u0032':			Literal('2'),			# 2
@@ -101,8 +103,10 @@ chars = {
 	'\u0037':			Literal('7'),			# 7
 	'\u0038':			Literal('8'),			# 8
 	'\u0039':			Literal('9'),			# 9
+	'\u003a':			Literal('[???]'),		# :
 	'\u003b':			Literal(';'),			# ;
 	'\u003c':			LeftVowel('i'),			# <
+	'\u003d':			Literal('[???]'),		# =
 	'\u003e':			Spacing(''),			# >	(spacing)
 	'\u003f':			Literal('?'),			# ?
 	'\u0040':			Syllable('ka'),			# @
@@ -113,6 +117,7 @@ chars = {
 	'\u0045':			LeftCons('c'),			# E
 	'\u0046':			Syllable('cha'),		# F
 	'\u0047':			LeftCons('j'),			# G
+	'\u0048':			Literal('[???]'),		# H
 	'\u0049':			LeftCons('~n'),			# I
 	'\u004a':			Syllable('.ta'),		# J
 	'\u004b':			Syllable('.tha'),		# K
@@ -143,7 +148,11 @@ chars = {
 	'\u0064':			Syllable('"sra'),		# d
 	'\u0065':			LeftCons('tr'),			# e
 	'\u0066':			LeftCons('tt'),			# f
+	'\u0067':			Literal('[???]'),		# g
 	'\u0068':			Vowel('.r'),			# h U+0069 6a 6c might be .rr .l .ll?
+	'\u0069':			Literal('[???]'),		# i
+	'\u006a':			Literal('[???]'),		# j
+	'\u006b':			Literal('[???]'),		# k
 	'\u006c':			RightVowel('u'),		# l what is different from  s?
 	'\u006d':			RightVowel('uu'),		# m what is different from t?
 	'\u006e':			RightCons('n'),			# n	appears e.g. after '"' in pna
@@ -156,14 +165,20 @@ chars = {
 	'\u0075':			RightVowel('e'),		# u becomes part of -o as 'pu'
 	'\u0076':			RightVowel('ai'),		# v becomes part of -au as 'pv'
 	'\u0077':			RightVowel('.r'),		# w 78 and 79 might be -.rr and -.l or -.l and -.ll
+	'\u0078':			Literal('[???]'),		# x
+	'\u0079':			Literal('[???]'),		# y
 	'\u007a':			Syllable('.m'),			# z
 	'\u007b':			RightFrontalR('r'),		# { hook above line. adds r to the beginning of syllable
 	'\u007c':			RightFrontalRAndTailM('r-.m'),	# | hook above + dot. adds r to the beginning and .m to the end
 	'\u007d':			RightCons('r'),			# } line from center to left-bottom
 	'\u007e':			RightCons('r'),			# ~ caret below character (used for -r in syllables not ending with bar)
 	'\u00a0':			LeftCons('pt'),			# NBSP
+	'\u00a2':			Literal('[???]'),		# ¢
+	'\u00a3':			Literal('[???]'),		# £
+	'\u00a7':			Literal('[???]'),		# §
 	'\u00a8':			Syllable('dbha'),		# ¨
 	'\u00a9':			Syllable('dda'),		# ©
+	'\u00ac':			Literal('[???]'),		# ¬
 	'\u00ae':			Syllable('dba'),		# ®
 	'\u00b0':			Spacing(''),			# ° (spacing e.g. after ka, ruu)
 	'\u00b1':			Syllable('kla'),		# ±
@@ -181,6 +196,7 @@ chars = {
 	'\u00c9':			LeftCons('jj'),			# É
 	'\u00cb':			Syllable('.tya'),		# Ë
 	'\u00cc':			Vowel('u'),				# Ì ?
+	'\u00cd':			Literal('[???]'),		# Í
 	'\u00cf':			Vowel('a'),				# Ï
 	'\u00d1':			Syllable('lla'),		# Ñ
 	'\u00d3':			Vowel('uu'),			# Ó ?
@@ -205,6 +221,9 @@ chars = {
 	'\u00f1':			Literal('\u2014'),		# ñ —, em-dash
 	'\u00f2':			Syllable('kta'),		# ò
 	'\u00f3':			Literal('\u2015'),		# ó ―, horizontal bar (dash longer than em dash)
+	'\u00f4':			Literal('[???]'),		# ô
+	'\u00f5':			Literal('[???]'),		# õ
+	'\u00f7':			Literal('[???]'),		# ÷
 	'\u00f9':			Syllable('dya'),		# ù
 	'\u00fb':			Syllable('dga'),		# û
 	'\u00fc':			Syllable('dva'),		# ü
@@ -220,6 +239,8 @@ chars = {
 	'\u201e':			Syllable('hra'),		# „
 	'\u2021':			Syllable('ru'),			# ‡
 	'\u2026':			Syllable('kva'),		# …
+	'\u2030':			Literal('[???]'),		# ‰
+	'\u203a':			Literal('[???]'),		# ›
 	'\u2044':			LeftCons('l'),			# ⁄
 	'\u2122':			Syllable('d.r'),		# ™ ?
 	'\u2206':			LeftCons('"sc'),		# ∆
