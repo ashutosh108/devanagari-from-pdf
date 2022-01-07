@@ -338,9 +338,15 @@ def fix_common_letter_spacing_problems(line):
 	# S"pX"nv\"
 	line = line.replace('\\v ', 'v\\')
 
+	# ojastejodyutidhara.h: -r moves before -u, fix it
 	# ÏpuG"_O"uG"puù<s O"R"Z#
-	# ÏpuG"_O"uG"puù<s O"R"Z#
+	# ÏpuG"_O"uG"puùs<O"R"Z#
 	line = line.replace('<s ', 's<')
+
+	# viitamohairiti: -i moves before -ai, fix it
+	# \"rO"X"pu`qv Z<O"
+	# \"rO"X"pu`vqZ<O"
+	line = line.replace('qv ', 'vq')
 
 	return line
 
