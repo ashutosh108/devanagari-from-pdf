@@ -249,9 +249,7 @@ for code, syl in chars.items():
 		globals()[array_name] = {}
 	globals()[array_name][code] = syl.str
 	
-syllables |= leftconss
-syllables |= literals
-syllables |= vowels
+start_chars = syllables | leftconss | literals | vowels
 
 # return ([:consonant:]*)([:vowel:]?)
 # assuming that there might be many consonants, but not more than one vowel.
@@ -315,6 +313,9 @@ def handle_trailing_vowels_and_r(line, repl_to):
 		# should consider leftcons-es part of our syllable.
 		elif oldvowel == '' and c in leftconss:
 			repl_to += leftconss[c]
+		# Same for syllables[]
+		elif oldvowel == '' and c in syllables:
+			repl_to += syllables[c]
 		# r-...-.m as combined as a single char
 		elif c in rightfrontalrandtailms:
 			repl_to = 'r' + repl_to + '.m'
@@ -349,9 +350,9 @@ def decodeline(line):
 	line = fix_common_letter_spacing_problems(line)
 
 	while line:
-		if line[0] in syllables:
+		if line[0] in start_chars:
 			repl_from = line[0]
-			repl_to = syllables[repl_from]
+			repl_to = start_chars[repl_from]
 			line = line[1:]
 
 			line, repl_to = handle_trailing_vowels_and_r(line, repl_to)
