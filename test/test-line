@@ -4,11 +4,13 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 OK="${LGREEN}OK${NC}"
 FAIL="${RED}FAIL${NC}"
+got_lines_argument=0
 
 BASE_NAME=$1
 
 while shift; do
 	[ -z "$1" ] && break
+	got_lines_argument=1
 	if [[ "$VERBOSE" -gt 0 ]]; then
 		echo "$(sed "$1q;d" sample/$BASE_NAME.txt)"
 	fi
@@ -16,3 +18,12 @@ while shift; do
 	diff -u - <<< "$EXPECTED" <(sed "$1q;d" sample/$BASE_NAME.txt | src/decode-shree-devanagari.py -) && RESULT="$OK" || RESULT="$FAIL\n"
 	printf "TEST LINE $1 of $BASE_NAME:	$RESULT\n"
 done
+
+# did not get LINES=... argument, so check all lines at once
+if [[ $got_lines_argument == 0 ]]; then
+	if [[ "$VERBOSE" -gt 0 ]]; then
+		cat sample/$BASE_NAME.txt
+	fi
+	diff -u test/$BASE_NAME-expected.txt <(src/decode-shree-devanagari.py sample/$BASE_NAME.txt) && RESULT="$OK" || RESULT="$FAIL"
+	printf "$BASE_NAME: $RESULT\n"
+fi
