@@ -100,7 +100,7 @@ chars = {
 	'\u0041':			LeftCons('kh'),			# A
 	'\u0042':			LeftCons('g'),			# B
 	'\u0043':			LeftCons('gh'),			# C
-	'\u0044':			Syllable('"n'),			# D
+	'\u0044':			Syllable('"na'),		# D
 	'\u0045':			LeftCons('c'),			# E
 	'\u0046':			Syllable('cha'),		# F
 	'\u0047':			LeftCons('j'),			# G
@@ -315,7 +315,7 @@ def fix_common_letter_spacing_problems(line):
 def decodeline(line):
 	res = ''
 	# collect additional parts of final syllable until we see syllable completion
-	add_consonants_before_syllable = ''
+	consonants_before_syllable = ''
 	# since -i is written before the syllable, flag it as necessary
 	i_modifier = False
 
@@ -327,12 +327,14 @@ def decodeline(line):
 			repl_from = line[0:2] if two_chars_code else line[0]
 			repl_to = syllables[repl_from]
 			line = line[len(repl_from):]
+
 			i_modifier, repl_to = handle_i_modifier(i_modifier, repl_to)
 			line, repl_to = handle_trailing_vowels_and_r(line, repl_to)
-			res += add_consonants_before_syllable + repl_to
-			add_consonants_before_syllable = ''
+
+			res += consonants_before_syllable + repl_to
+			consonants_before_syllable = ''
 		elif line[0] in leftconss:
-			add_consonants_before_syllable += leftconss[line[0]]
+			consonants_before_syllable += leftconss[line[0]]
 			line = line[1:]
 		elif line[0] in leftvowels:
 			i_modifier = True
