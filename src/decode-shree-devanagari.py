@@ -338,6 +338,10 @@ def fix_common_letter_spacing_problems(line):
 	# S"pX"nv\"
 	line = line.replace('\\v ', 'v\\')
 
+	# ÏpuG"_O"uG"puù<s O"R"Z#
+	# ÏpuG"_O"uG"puù<s O"R"Z#
+	line = line.replace('<s ', 's<')
+
 	return line
 
 def decodeline(line):
