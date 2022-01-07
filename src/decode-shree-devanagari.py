@@ -1,13 +1,6 @@
 #!/bin/env python3
 import argparse
 
-def add_unchanging_letters(dic):
-	letters_as_they_are = "0123456789()- .,\n\f"
-	new = {}
-	for c in letters_as_they_are:
-		new[c] = c
-	return {**new, **dic}
-
 def add_virama_rules(dic):
 	new = {}
 	for f, t in dic.items():
@@ -22,64 +15,64 @@ def add_virama_rules(dic):
 
 # char to be replaced by literal string as given, not other handling required.
 # e.g. digits, '.', etc
-class Literal:
+class CharType:
 	def __init__(self, str):
 		self.str = str
 
+class Literal(CharType):
+	pass
+
 # represents char which denotes complete syllable which can optionally be
 # appended with some trailing chars
-class Syllable(Literal):
+class Syllable(CharType):
 	pass
 
 # represents vowel which is to replace whatever trailing vowel we have already
 # "vowel which is the right half of simple syllable"
 # e.g. -ii or -aa
-class RightVowel(Literal):
+class RightVowel(CharType):
 	pass
 
 # consonant to be added on the right, but before vowels
 # e.g. -r
-class RightCons(Literal):
+class RightCons(CharType):
 	pass
 
 # this char code is appended on the right, but 'r' must be added *in front* of
 # the syllable
-class RightFrontalR(Literal):
+class RightFrontalR(CharType):
 	pass
 
 # like RightFrontalR but also add .m to the end
-class RightFrontalRAndTailM(Literal):
+class RightFrontalRAndTailM(CharType):
 	pass
 
 # char code happens in the beginning of syllable, but represents '-i' to be
 # appended to the syllable.  Only 'i', but it comes in three different codes
 # for three different arc lenghts.
-class LeftVowel(Literal):
+class LeftVowel(CharType):
 	pass
 
 # not a real space, but a spacing character used by original layout program to
 # adjust characters properly. We simply ignore them at the end of each
 # syllable.
 # e.g. '>'
-class Space(Literal):
+class Space(CharType):
 	pass
 
 # 'left half os syllable, a consonant'
 # e.g. kh-
-class LeftCons(Literal):
+class LeftCons(CharType):
 	pass
 
 # complete vowel when it stands separately
 # e.g. 'a' or 'i'
-class Vowel(Literal):
+class Vowel(CharType):
 	pass
 
 # We need special handling for Virama, so mark it separately
-class Virama(Literal):
+class Virama(CharType):
 	pass
-
-a = Literal('a')
-b = Syllable('sa')
 
 # potential replacements (all codepoints extracted  from /ToUnicode objects in PDF files_:
 chars = {
@@ -208,10 +201,10 @@ chars = {
 	'\u00eb':			Literal('\u2018'), 		# U+2018 left single quotation mark
 	'\u00ec':			LeftVowel('i'),			# ì
 	'\u00ed':			Literal('\u2019'),		# U+2019 right single quotation mark
-	'\u00ee':			RightVowel('-ii'),		# î what is different from 'r'?
-	'\u00f1':			Literal('\u2013'),		# ñ –, en-dash
+	'\u00ee':			RightVowel('ii'),		# î what is different from 'r'?
+	'\u00f1':			Literal('\u2014'),		# ñ —, em-dash
 	'\u00f2':			Syllable('kta'),		# ò
-	'\u00f3':			Literal('\u2014'),		# ó —, em-dash
+	'\u00f3':			Literal('\u2015'),		# ó ―, horizontal bar (dash longer than em dash)
 	'\u00f9':			Syllable('dya'),		# ù
 	'\u00fb':			Syllable('dga'),		# û
 	'\u00fc':			Syllable('dva'),		# ü
@@ -249,40 +242,15 @@ for code, syl in chars.items():
 		syllables[code] = syl.str
 syllables = add_virama_rules(syllables)
 
-#for code, syl in chars.items():
-#	if isinstance(syl, Literal):
-#		syllables[code] = syl.str
-syllables = add_unchanging_letters(syllables)
-
-# avoid replicating these special rules to "aa", "ii", halant etc
-syllables['#'] = '.h'
-syllables['$'] = '|'
-syllables['&'] = '.a'
-syllables['\u00b7'] = 'ruu'
-syllables['\u00cc'] = 'u';
-syllables['\u00cfp'] = 'aa'
-syllables['\u00cf'] = 'a'
-syllables['\u00d4'] = 'e'
-syllables['\u00da{'] = 'ii'
-syllables['\u00da'] = 'i'
-syllables['\u00eb'] = '\u2018' # U+2018 left single quotation mark
-syllables['\u00ed'] = '\u2019' # U+2019 right single quotation mark
-syllables['\u00f1'] = '—'
-syllables['\u2021'] = 'ru'
+for code, syl in chars.items():
+	if isinstance(syl, Literal) or isinstance(syl, Vowel):
+		syllables[code] = syl.str
 
 # letters modifying the following syllable
-repl_prefix = {
-	'\u25ca':	'k',
-}
-for k, v in syllables.items():
-	if len(k)==2 and k[1] == '"':
-		if not (len(v) > 1 and v[-1] == 'a'):
-			raise Exception("wrong replacement pair found: '%s' => '%s' pattern ends on '\"', but replacement doesn't end on 'a'" % (k, v))
-		repl_prefix[k[0]] = v[:-1]
-
-# trailing vowels lookup. Must be longest-first among matching prefixes since
-# first match wins and we want the longest one among the two entries to win.
-# e.g. 'pv' must go before 'p'.
+repl_prefix = {}
+for code, syl in chars.items():
+	if isinstance(syl, LeftCons):
+		repl_prefix[code] = syl.str
 
 repl_trailing = {
 	'l':	'u',
@@ -331,7 +299,10 @@ def handle_trailing_vowels_and_r(line, repl_to):
 				repl_to = repl_to[:-3] + 'au'
 		# add frontal "r" as in rvi, rva
 		elif c == '{':
-			repl_to = 'r' + repl_to
+			if repl_to == 'i':
+				repl_to = 'ii'
+			else:
+				repl_to = 'r' + repl_to
 		# add trailing "r" as in grii, gra
 		elif c == '}':
 			repl_to = add_before_last_vowel('r', repl_to)
@@ -368,11 +339,11 @@ def decodeline(line):
 					break
 		if continue2:
 			continue
-		if line[0:1] in repl_prefix:
+		if line[0] in repl_prefix:
 			add_consonants_before_syllable += repl_prefix[line[0]]
 			line = line[1:]
 			continue
-		if line[0:1] == '<' or line[0:1] == 'q' or line[0:1] == '\u00ec':
+		if line[0] == '<' or line[0] == 'q' or line[0] == '\u00ec':
 			i_modifier = True
 			line = line[1:]
 			continue
