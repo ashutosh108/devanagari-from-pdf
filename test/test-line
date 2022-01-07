@@ -2,6 +2,8 @@
 LGREEN='\033[1;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+# Don't use escape colour codes when stdout (file descriptor 1) is not a terminal.
+[ -t 1 ] || LGREEN='' RED='' NC=''
 OK="${LGREEN}OK${NC}"
 FAIL="${RED}FAIL${NC}"
 
