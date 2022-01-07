@@ -253,15 +253,6 @@ for code, syl in leftconss.items():
 syllables |= literals
 syllables |= vowels
 
-# optimization: group all entries by first char of it's key to make linear
-# search shorter.
-repl_for_letter = {}
-for k, v in syllables.items():
-	if k[0] in repl_for_letter:
-		repl_for_letter[k[0]][k] = v
-	else:
-		repl_for_letter[k[0]] = {k: v}
-
 def handle_i_modifier(i_modifier, repl_to):
 	if i_modifier:
 		repl_to = repl_to[:-1] + 'i'
@@ -331,30 +322,25 @@ def decodeline(line):
 	line = fix_common_letter_spacing_problems(line)
 
 	while line:
-		continue2 = False
-		if line[0] in repl_for_letter:
-			for repl_from, repl_to in repl_for_letter[line[0]].items():
-				if line.startswith(repl_from):
-					line = line[len(repl_from):]
-					i_modifier, repl_to = handle_i_modifier(i_modifier, repl_to)
-					line, repl_to = handle_trailing_vowels_and_r(line, repl_to)
-					res += add_consonants_before_syllable + repl_to
-					add_consonants_before_syllable = ''
-					continue2 = True
-					break
-		if continue2:
-			continue
-		if line[0] in leftconss:
+		two_chars_code = line[0:2] in syllables
+		if two_chars_code or line[0] in syllables:
+			repl_from = line[0:2] if two_chars_code else line[0]
+			repl_to = syllables[repl_from]
+			line = line[len(repl_from):]
+			i_modifier, repl_to = handle_i_modifier(i_modifier, repl_to)
+			line, repl_to = handle_trailing_vowels_and_r(line, repl_to)
+			res += add_consonants_before_syllable + repl_to
+			add_consonants_before_syllable = ''
+		elif line[0] in leftconss:
 			add_consonants_before_syllable += leftconss[line[0]]
 			line = line[1:]
-			continue
-		if line[0] in leftvowels:
+		elif line[0] in leftvowels:
 			i_modifier = True
 			line = line[1:]
-			continue
 		# could not find any known prefix, escape next char
-		res += "[" + line[0] + "]"
-		line = line[1:]
+		else:
+			res += "[" + line[0] + "]"
+			line = line[1:]
 	return res
 
 def main(args):
