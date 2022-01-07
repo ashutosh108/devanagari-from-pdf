@@ -4,26 +4,27 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 OK="${LGREEN}OK${NC}"
 FAIL="${RED}FAIL${NC}"
-got_lines_argument=0
 
-BASE_NAME=$1
+TESTS="$1"
+LINES_GIVEN="$2"
 
-while shift; do
-	[ -z "$1" ] && break
-	got_lines_argument=1
-	if [[ "$VERBOSE" -gt 0 ]]; then
-		echo "$(sed "$1q;d" sample/$BASE_NAME.txt)"
+for BASE_NAME in $TESTS; do
+	for line in $LINES_GIVEN; do
+		[ -z "$line" ] && break
+		if [[ "$VERBOSE" -gt 0 ]]; then
+			echo "$(sed "${line}q;d" sample/$BASE_NAME.txt)"
+		fi
+		EXPECTED=$(sed "${line}q;d" test/$BASE_NAME-expected.txt)
+		diff -u - <<< "$EXPECTED" <(sed "${line}q;d" sample/$BASE_NAME.txt | src/decode-shree-devanagari.py -) && RESULT="$OK" || RESULT="$FAIL\n"
+		printf "TEST LINE $line of $BASE_NAME:	$RESULT\n"
+	done
+
+	# did not get LINES=... argument, so check all lines at once
+	if [[ -z "$LINES_GIVEN" ]]; then
+		if [[ "$VERBOSE" -gt 0 ]]; then
+			cat sample/$BASE_NAME.txt
+		fi
+		diff -u test/$BASE_NAME-expected.txt <(src/decode-shree-devanagari.py sample/$BASE_NAME.txt) && RESULT="$OK" || RESULT="$FAIL"
+		printf "$BASE_NAME: $RESULT\n"
 	fi
-	EXPECTED=$(sed "$1q;d" test/$BASE_NAME-expected.txt)
-	diff -u - <<< "$EXPECTED" <(sed "$1q;d" sample/$BASE_NAME.txt | src/decode-shree-devanagari.py -) && RESULT="$OK" || RESULT="$FAIL\n"
-	printf "TEST LINE $1 of $BASE_NAME:	$RESULT\n"
 done
-
-# did not get LINES=... argument, so check all lines at once
-if [[ $got_lines_argument == 0 ]]; then
-	if [[ "$VERBOSE" -gt 0 ]]; then
-		cat sample/$BASE_NAME.txt
-	fi
-	diff -u test/$BASE_NAME-expected.txt <(src/decode-shree-devanagari.py sample/$BASE_NAME.txt) && RESULT="$OK" || RESULT="$FAIL"
-	printf "$BASE_NAME: $RESULT\n"
-fi
