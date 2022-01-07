@@ -136,7 +136,7 @@ chars = {
 	'\u0064':			Syllable('"sra'),		# d
 	'\u0065':			LeftCons('tr'),			# e
 	'\u0066':			LeftCons('tt'),			# f
-	'\u0067':			Literal('[???]'),		# g
+	'\u0067':			Literal('.o'),			# g OM (AUM)
 	'\u0068':			Vowel('.r'),			# h U+0069 6a 6c might be .rr .l .ll?
 	'\u0069':			Literal('[???]'),		# i
 	'\u006a':			Literal('[???]'),		# j
