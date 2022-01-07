@@ -348,6 +348,11 @@ def fix_common_letter_spacing_problems(line):
 	# \"rO"X"pu`vqZ<O"
 	line = line.replace('qv ', 'vq')
 
+	# vyaapnoti: -i moves before -e (which is used as part of -o here)
+	# \Y"pT"np<u O"
+	# \Y"pT"npu<O"
+	line = line.replace('<u ', 'u<')
+
 	return line
 
 def decodeline(line):
