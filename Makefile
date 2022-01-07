@@ -11,17 +11,19 @@ test: $(patsubst %, sample/%.txt, ${PAGES}) FORCE
 	@VERBOSE=${VERBOSE} test/test-line "${PAGES}" "${LINES}" "${FRAGMENTS}"
 
 sample/%.txt: sample/%.pdf
-	pdftotext -layout -nopgbrk $<
+	pdftotext -layout -nopgbrk "$<"
 
-sample/decoded-p%.pdf: sample/p%.pdf
+sample/%.qdf: sample/%.pdf
 	qpdf --qdf "$<" "$@"
 
 sample/p%.pdf: sample/vi1000\ -\ govindAcArya\ [san].pdf
 	pdfseparate -f $(patsubst sample/p%.pdf,%,$@) -l $(patsubst sample/p%.pdf,%,$@) "$<" $@
 
-go-%: sample/decoded-p%.pdf
-	fix-qdf $< > sample/tmp.pdf
+go-%: sample/p%.qdf
+	fix-qdf "$<" > sample/tmp.pdf
 	xdg-open sample/tmp.pdf
 
 clean:
-	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/decoded-p[0-9][0-9][0-9].pdf sample/tmp.pdf sample/vi*.txt
+	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/*.qdf sample/tmp.pdf sample/vi*.txt
+
+qdf: sample/vi1000\ -\ govindAcArya\ [san].qdf
