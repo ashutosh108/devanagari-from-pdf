@@ -298,12 +298,28 @@ def handle_trailing_vowels_and_r(line, repl_to):
 		line = line[1:]
 	return line, repl_to
 
+# swap and cleanup some letters on input to compensate weird spacing
+def fix_common_letter_spacing_problems(line):
+	# for some reason, pdftotext wants to move m- ('X') character before -e
+	# ('u') while also adding space. It is probably because 'u' include quite a
+	# step backwards. Try to fix it manually.
+	line = line.replace('Xu ', 'uX')
+
+	# naamnaiva: v- moves before -ai, fix it
+	# S"pX"n\v "
+	# S"pX"nv\"
+	line = line.replace('\\v ', 'v\\')
+
+	return line
+
 def decodeline(line):
 	res = ''
 	# collect additional parts of final syllable until we see syllable completion
 	add_consonants_before_syllable = ''
 	# since -i is written before the syllable, flag it as necessary
 	i_modifier = False
+
+	line = fix_common_letter_spacing_problems(line)
 
 	while line:
 		continue2 = False

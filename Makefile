@@ -2,12 +2,13 @@
 
 # we use bash for <(cmd) argument to diff
 SHELL := bash
-TESTS := p113 p115
+PAGES := p005 p113 p115
 #LINES := 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
+FRAGMENTS := f001 f002
 VERBOSE := 0
 
-test: $(patsubst %, sample/%.txt, ${TESTS}) FORCE
-	@VERBOSE=${VERBOSE} test/test-line "${TESTS}" "${LINES}"
+test: $(patsubst %, sample/%.txt, ${PAGES}) FORCE
+	@VERBOSE=${VERBOSE} test/test-line "${PAGES}" "${LINES}" "${FRAGMENTS}"
 
 sample/%.txt: sample/%.pdf
 	pdftotext -layout -nopgbrk $<

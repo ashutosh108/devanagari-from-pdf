@@ -7,6 +7,15 @@ FAIL="${RED}FAIL${NC}"
 
 TESTS="$1"
 LINES_GIVEN="$2"
+FRAGMENTS="$3"
+
+for BASE_NAME in $FRAGMENTS; do
+	if [[ "$VERBOSE" -gt 0 ]]; then
+		cat test/$BASE_NAME-in.txt
+	fi
+	diff -u test/$BASE_NAME-out.txt <(src/decode-shree-devanagari.py test/$BASE_NAME-in.txt) && RESULT="$OK" || RESULT="$FAIL"
+	printf "fragment $BASE_NAME: $RESULT\n"
+done
 
 for BASE_NAME in $TESTS; do
 	for line in $LINES_GIVEN; do
