@@ -1,5 +1,6 @@
 #!/bin/env python3
 import argparse
+import re
 
 # 'Literal' and derived classes are only used in chars array below. They are
 # used to denote type of each entry so we can easily filter them by type.
@@ -248,36 +249,57 @@ for code, syl in chars.items():
 		globals()[array_name] = {}
 	globals()[array_name][code] = syl.str
 	
-for code, syl in leftconss.items():
-	syllables[code + '"'] = syl + 'a'
+syllables |= leftconss
 syllables |= literals
 syllables |= vowels
 
+# return ([:consonant:]*)([:vowel:]?)
+# assuming that there might be many consonants, but not more than one vowel.
+def split_vowel(str):
+	# Make sure we have two non-optional groups. Then empty groups would return
+	# as '' (as we want), not as None
+	r = re.compile(r'^(.*?)((?:a|aa|i|ii|u|uu|e|ai|o|au|\.r|\.rr|\.l|\.ll)?)$')
+	m = r.match(str)
+	if m:
+		return m.groups()
+	return str
+
+def test_cons_vowel(str, cons, vwls):
+	res = split_vowel(str)
+	if res != (cons, vwls):
+		raise Exception('%s split into %s, not (%s, %s)' % (str, res, cons, vwls))
+
+# quick internal sanity checks
+test_cons_vowel('ba', 'b', 'a')
+test_cons_vowel('raa', 'r', 'aa')
+test_cons_vowel('k.r', 'k', '.r')
+test_cons_vowel('c', 'c', '')
+
+def replace_vowel(str, newvowel):
+	conss, oldvowel = split_vowel(str)
+	return conss + newvowel
+
 def handle_i_modifier(i_modifier, repl_to):
 	if i_modifier:
-		repl_to = repl_to[:-1] + 'i'
+		repl_to = replace_vowel(repl_to, 'i')
 	i_modifier = False
 	return i_modifier, repl_to
 
-# TODO: probably should process .r, .rr, .l and .ll vowels as well, but would
-# be nice to see an actual example of one of them before impleneting to make
-# sure it really works
 def add_before_last_vowel(what, syllable):
-	vowels=''
-	while syllable and syllable[-1] in "aeiou":
-		vowels += syllable[-1:]
-		syllable = syllable[:-1]
-	return syllable + what + vowels
+	conss, vowel = split_vowel(syllable)
+	return conss + what + vowel
 
 def handle_trailing_vowels_and_r(line, repl_to):
 	while line:
 		c = line[0]
+		conss, oldvowel = split_vowel(repl_to)
 		if c in rightvowels:
-			repl_to = repl_to[:-1] + rightvowels[c]
-			if repl_to.endswith('ae'):
-				repl_to = repl_to[:-2] + 'o'
-			elif repl_to.endswith('aai'):
-				repl_to = repl_to[:-3] + 'au'
+			newvowel = rightvowels[c]
+			if oldvowel == 'aa' and newvowel == 'e':
+				newvowel = 'o'
+			elif oldvowel == 'aa' and newvowel == 'ai':
+				newvowel = 'au'
+			repl_to = conss + newvowel
 		# add frontal "r" as in rvi, rva
 		elif c in rightfrontalrs:
 			# however, 'ii' is written as combination of 'i' and 'r hook'
@@ -288,6 +310,11 @@ def handle_trailing_vowels_and_r(line, repl_to):
 		# add trailing "r" as in grii, gra
 		elif c in rightconss:
 			repl_to = add_before_last_vowel(rightconss[c], repl_to)
+		# Generally, leftcons means start of a new syllable. However, if we
+		# don't yet have complete syllable (i.e. oldvowel is '' so far), we
+		# should consider leftcons-es part of our syllable.
+		elif oldvowel == '' and c in leftconss:
+			repl_to += leftconss[c]
 		# r-...-.m as combined as a single char
 		elif c in rightfrontalrandtailms:
 			repl_to = 'r' + repl_to + '.m'
@@ -322,14 +349,13 @@ def decodeline(line):
 	line = fix_common_letter_spacing_problems(line)
 
 	while line:
-		two_chars_code = line[0:2] in syllables
-		if two_chars_code or line[0] in syllables:
-			repl_from = line[0:2] if two_chars_code else line[0]
+		if line[0] in syllables:
+			repl_from = line[0]
 			repl_to = syllables[repl_from]
-			line = line[len(repl_from):]
+			line = line[1:]
 
-			i_modifier, repl_to = handle_i_modifier(i_modifier, repl_to)
 			line, repl_to = handle_trailing_vowels_and_r(line, repl_to)
+			i_modifier, repl_to = handle_i_modifier(i_modifier, repl_to)
 
 			res += consonants_before_syllable + repl_to
 			consonants_before_syllable = ''
