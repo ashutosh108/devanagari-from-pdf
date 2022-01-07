@@ -368,6 +368,12 @@ def fix_common_letter_spacing_problems(line):
 	line = line.replace('\u00d5l ', 'l\u00d5')
 	line = line.replace('<> ', '><')
 
+	# striipu.msayorhari.h: s- moved before .m, -i before r-
+	#ÆrT"s_z "Y"pu`q{ Z#
+	#ÆrT"sz_"Y"pu`{qZ#
+	line = line.replace('_z ', 'z_')
+	line = line.replace('q{ ', '{q')
+
 	return line
 
 def decodeline(line):
