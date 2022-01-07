@@ -154,7 +154,7 @@ chars = {
 	'\u0076':			RightVowel('ai'),		# v becomes part of -au as 'pv'
 	'\u0077':			RightVowel('.r'),		# w 78 and 79 might be -.rr and -.l or -.l and -.ll
 	'\u0078':			Literal('[???]'),		# x
-	'\u0079':			Literal('[???]'),		# y
+	'\u0079':			Literal('~m'),			# y Chandra-bindu
 	'\u007a':			Syllable('.m'),			# z
 	'\u007b':			RightFrontalR('r'),		# { hook above line. adds r to the beginning of syllable
 	'\u007c':			RightFrontalRAndTailM('r-.m'),	# | hook above + dot. adds r to the beginning and .m to the end
