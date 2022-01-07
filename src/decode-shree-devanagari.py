@@ -94,7 +94,7 @@ chars = {
 	'\u003a':			Literal('[???]'),		# :
 	'\u003b':			Literal(';'),			# ;
 	'\u003c':			LeftVowel('i'),			# <
-	'\u003d':			Literal('[???]'),		# =
+	'\u003d':			Literal('='),			# =
 	'\u003e':			Spacing(''),			# >	(spacing)
 	'\u003f':			Literal('?'),			# ?
 	'\u0040':			Syllable('ka'),			# @
