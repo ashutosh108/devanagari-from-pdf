@@ -12,17 +12,15 @@ test: $(patsubst %, sample/%.txt, ${TESTS}) FORCE
 sample/%.txt: sample/%.pdf
 	pdftotext -layout -nopgbrk $<
 
-all: p113-decoded.pdf p114-decoded.pdf
-
-sample/p%-decoded.pdf: sample/p%.pdf
+sample/decoded-p%.pdf: sample/p%.pdf
 	qpdf --qdf "$<" "$@"
 
 sample/p%.pdf: sample/vi1000\ -\ govindAcArya\ [san].pdf
 	pdfseparate -f $(patsubst sample/p%.pdf,%,$@) -l $(patsubst sample/p%.pdf,%,$@) "$<" $@
 
-go-%: sample/p%-decoded.pdf
+go-%: sample/decoded-p%.pdf
 	fix-qdf $< > sample/tmp.pdf
 	xdg-open sample/tmp.pdf
 
 clean:
-	rm -f sample/p[0-9][0-9][0-9].txt sample/p11[6-9].pdf sample/p[0-9][0-9][0-9]-decoded.pdf sample/tmp.pdf
+	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/decoded-p[0-9][0-9][0-9].pdf sample/tmp.pdf sample/vi*.txt
