@@ -105,7 +105,7 @@ chars = {
 	'\u0045':			LeftCons('c'),			# E
 	'\u0046':			Syllable('cha'),		# F
 	'\u0047':			LeftCons('j'),			# G
-	'\u0048':			Literal('[???]'),		# H
+	'\u0048':			LeftCons('jh'),			# H
 	'\u0049':			LeftCons('~n'),			# I
 	'\u004a':			Syllable('.ta'),		# J
 	'\u004b':			Syllable('.tha'),		# K
@@ -352,6 +352,14 @@ def fix_common_letter_spacing_problems(line):
 	# \Y"pT"np<u O"
 	# \Y"pT"npu<O"
 	line = line.replace('<u ', 'u<')
+
+	# sarvadu.s.tanibarha.naaya: -u moved after .s.t, -i moved, spaces added.
+	# We fix this, but it looks really custom. Would be nice to figure out a
+	# more generic change.
+	#_"\"{QÕl <> S"V"`{N"pY"
+	#_"\"{QlÕ<>S"V"`{N"pY"
+	line = line.replace('\u00d5l ', 'l\u00d5')
+	line = line.replace('<> ', '><')
 
 	return line
 
