@@ -1,0 +1,59 @@
+WHAT IS THIS
+============
+
+devanagari-from-pdf is a postprocessor to extract proper Sansk.rt (Sanskrit)
+text from devanaagari PDF files WHEN those files have been properly created
+with SHREE* fonts (see sample/ for an example of such file). Works as a
+command-line filter.
+
+Status
+======
+
+It is work in progress. But even now it properly converts over 99% of
+syllables, even if text requires some verification and editing afterwards.
+
+Usage
+=====
+
+0. Apply the following patch to poppler-utils' pdftotext so it would not
+   convert U+00A0 (non-breaking space) to ASCII space in output. Unfortunately,
+   U+00A0 is actually used in the SHREE fonts' encoding and the only workaround
+   I could find so far is applying this patch and recompiling pdftotext.
+
+diff --git a/poppler/TextOutputDev.cc b/poppler/TextOutputDev.cc
+index 67a6246d..a60d9191 100644
+--- a/poppler/TextOutputDev.cc
++++ b/poppler/TextOutputDev.cc
+@@ -2656,7 +2656,7 @@ void TextPage::addChar(const GfxState *state, double x, double y, double dx, dou
+	 }
+
+	 // break words at space character
+-    if (uLen == 1 && UnicodeIsWhitespace(u[0])) {
++    if (uLen == 1 && u[0] == ' ') { //UnicodeIsWhitespace(u[0])) {
+		 charPos += nBytes;
+		 endWord();
+		 return;
+
+1. Run pdftotext -layout filename.pdf
+   This will generate filename.txt which is not really human-readable yet.
+
+2. Run
+   decode-shree-devanagari.py filename.txt > decoded.txt
+
+decoded.txt is a Velthius-encoded text file. There are many ways to re-encode
+Velthius to unicode devanaagari, itrans or other encodings online, this program
+does not try to cover that.
+
+TO DO (future plans)
+====================
+
+1. Complete support of all characters and their combinations as used in the PDF
+   file in sample/.
+
+2. Recode this python script as a proper part of poppler-utils' pdftotext.
+   Bison and flex might be useful. Perhaps suggest an upstream patch when ready.
+
+3. Properly handle mix of characters from non-devanaagari alphabets, e.g.:
+	- 'x' in 1 x 100 on page 25 of vi1000 - govindAcArya [san].pdf
+	- some kanna.da word on page 26 of the same PDF.
+	This seems to be best doable from within pdftotext.
