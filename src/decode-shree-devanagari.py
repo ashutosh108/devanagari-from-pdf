@@ -221,7 +221,7 @@ chars = {
 	'\u00f1':			Literal('\u2014'),		# ñ —, em-dash
 	'\u00f2':			Syllable('kta'),		# ò
 	'\u00f3':			Literal('\u2015'),		# ó ―, horizontal bar (dash longer than em dash)
-	'\u00f4':			Literal('[???]'),		# ô
+	'\u00f4':			Syllable('.t.ta'),		# ô
 	'\u00f5':			Syllable('.d.da'),		# õ
 	'\u00f7':			Literal('[???]'),		# ÷
 	'\u00f9':			Syllable('dya'),		# ù
