@@ -227,7 +227,7 @@ chars = {
 	'\u201e':			Syllable('hra'),		# „
 	'\u2021':			Syllable('ru'),			# ‡
 	'\u2026':			Syllable('kva'),		# …
-	'\u2030':			Literal('[???]'),		# ‰
+	'\u2030':			Syllable('pla'),		# ‰
 	'\u203a':			Literal('[???]'),		# ›
 	'\u2044':			LeftCons('l'),			# ⁄
 	'\u2122':			Syllable('d.r'),		# ™ ?
