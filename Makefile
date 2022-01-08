@@ -34,6 +34,17 @@ test: $(patsubst %, sample/%.txt, ${PAGES}) FORCE
 sample/%.txt: sample/%.pdf
 	pdftotext -layout -nopgbrk "$<"
 
+sample/%-split.txt: sample/%.pdf
+	WIDTH=$$(pdfinfo "$<" | awk 'match($$0, "Page size: *([0-9]+)[^0-9]+([0-9]+)", m) { print m[2] }'); \
+	echo width: $$WIDTH; \
+	PAGES=$$(pdfinfo "$<" |awk '/Pages:/{print $$2}'); \
+	echo pages: $$PAGES; \
+	HALFWIDTH=$$((WIDTH/2)); \
+	for ((i=1;i<=$$PAGES;i++)); do \
+		pdftotext -f $$i -l $$i -layout -W $$HALFWIDTH -H 10000 "$<" -; \
+		pdftotext -f $$i -l $$i -layout -W $$HALFWIDTH -H 10000 -x $$HALFWIDTH "$<" -; \
+	done > "$@"
+
 sample/%.qdf: sample/%.pdf
 	qpdf --qdf "$<" "$@"
 
