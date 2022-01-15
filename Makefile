@@ -51,9 +51,15 @@ sample/%.qdf: sample/%.pdf
 sample/p%.pdf: sample/vi1000\ -\ govindAcArya\ [san].pdf
 	pdfseparate -f $(patsubst sample/p%.pdf,%,$@) -l $(patsubst sample/p%.pdf,%,$@) "$<" $@
 
-go-%: sample/p%.qdf
+sample/uc-p%.pdf: sample/UpanishathChandrikaPart1.pdf
+	pdfseparate -f $(patsubst sample/uc-p%.pdf,%,$@) -l $(patsubst sample/uc-p%.pdf,%,$@) "$<" "$@"
+
+go-%: sample/%.qdf
 	fix-qdf "$<" > sample/tmp.pdf
 	xdg-open sample/tmp.pdf
+
+sample/%-decoded.txt: sample/%.txt
+	src/decode-shree-devanagari.py "$<" > $@
 
 clean:
 	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/*.qdf sample/tmp.pdf sample/vi*.txt
