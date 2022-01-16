@@ -33,7 +33,7 @@
 
 # we use bash for <(cmd) argument to diff
 SHELL := bash
-FRAGMENTS := f001 \
+DEFAULT_FRAGMENTS := f001 \
 	f002 \
 	f003 \
 	f004 \
@@ -55,9 +55,16 @@ FRAGMENTS := f001 \
 	f020 \
 	f021 \
 	f022
-PAGES := p005 p113 p115 uc-p002
+DEFAULT_PAGES := p005 p113 p115 uc-p002
 #LINES := 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
 VERBOSE := 0
+
+ifndef PAGES
+ifndef FRAGMENTS
+PAGES := ${DEFAULT_PAGES}
+FRAGMENTS := ${DEFAULT_FRAGMENTS}
+endif
+endif
 
 test: $(patsubst %, sample/%.txt, ${PAGES}) FORCE
 	@VERBOSE=${VERBOSE} test/test-line "${PAGES}" "${LINES}" "${FRAGMENTS}"
