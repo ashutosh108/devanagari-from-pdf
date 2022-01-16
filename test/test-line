@@ -20,13 +20,18 @@ for BASE_NAME in $FRAGMENTS; do
 done
 
 for BASE_NAME in $TESTS; do
+	if [ "${BASE_NAME:0:3}" = 'uc-' ]; then
+		ARGS='-m'
+	else
+		ARGS=''
+	fi
 	for line in $LINES_GIVEN; do
 		[ -z "$line" ] && break
 		if [[ "$VERBOSE" -gt 0 ]]; then
 			echo "$(sed "${line}q;d" sample/$BASE_NAME.txt)"
 		fi
 		EXPECTED=$(sed "${line}q;d" test/$BASE_NAME-expected.txt)
-		diff -u - <<< "$EXPECTED" <(sed "${line}q;d" sample/$BASE_NAME.txt | src/decode-shree-devanagari.py -) && RESULT="$OK" || RESULT="$FAIL\n"
+		diff -u - <<< "$EXPECTED" <(sed "${line}q;d" sample/$BASE_NAME.txt | src/decode-shree-devanagari.py $ARGS -) && RESULT="$OK" || RESULT="$FAIL\n"
 		printf "TEST LINE $line of $BASE_NAME:	$RESULT\n"
 	done
 
@@ -35,7 +40,7 @@ for BASE_NAME in $TESTS; do
 		if [[ "$VERBOSE" -gt 0 ]]; then
 			cat sample/$BASE_NAME.txt
 		fi
-		diff -uN test/$BASE_NAME-expected.txt <(src/decode-shree-devanagari.py sample/$BASE_NAME.txt) && RESULT="$OK" || RESULT="$FAIL"
+		diff -uN test/$BASE_NAME-expected.txt <(src/decode-shree-devanagari.py $ARGS sample/$BASE_NAME.txt) && RESULT="$OK" || RESULT="$FAIL"
 		printf "$BASE_NAME: $RESULT\n"
 	fi
 done

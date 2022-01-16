@@ -24,7 +24,7 @@ FRAGMENTS := f001 \
 	f020 \
 	f021 \
 	f022
-PAGES := p005 p113 p115
+PAGES := p005 p113 p115 uc-p002
 #LINES := 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33
 VERBOSE := 0
 
@@ -62,6 +62,6 @@ sample/%-decoded.txt: sample/%.txt
 	src/decode-shree-devanagari.py "$<" > $@
 
 clean:
-	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/*.qdf sample/tmp.pdf sample/vi*.txt
+	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/*.qdf sample/tmp.pdf sample/vi*.txt sample/uc-p*.{pdf,txt} sample/Up*.txt
 
 qdf: sample/vi1000\ -\ govindAcArya\ [san].qdf

@@ -1,0 +1,29 @@
+* technical notes on Upani.sat candrikaa
+** Looks like due to lack or /ToUnicode in the font used there, the text from
+pdftotext needs to be recoded from macroman to utf-8 before further processing.
+	for almost all of devanagari: unnamed embedded Type3 font (/T35 in .PDF file).
+	SHREE-SAN is only used on page.3 (logical pages 5-6), only for 'prakaa"sakiiya.m ki~ncit praastaavikam' there. It is the only found non-pixelating text in PDF.
+	in unnamed type3 font (/T36 in uc-p002.qdf aka /T3_1):
+	   	00  02  03  04  05  03  06  03  07  03  08  05  09  0a  0b  0c
+	   	237 84  34  60  83  34  94  34  130 34  147 83  231 64  161 112
+	   	u	p-	-a	i-  n-  -a  .s-	-a  cc- -a  i-  n-  dra k-  spc -a
+   	same after pdftotext:
+   		í   T   "   <   S   "   ^   "   "   S   ç   @   ¡   p
+   		ed  54  22  3c  53  22  5e  22  22  53  e7  40  a1  70
+
+	font's encoding's /Differences [
+	    0
+	    /c237
+	    2
+2	    /c84
+3	    /c34
+4	    /c60
+5	    /c83
+6	    /c94
+7	    /c130
+8	    /c147
+9	    /c231
+a	    /c64
+b	    /c161
+c	    /c112
+	]

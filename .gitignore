@@ -1,4 +1,5 @@
 sample/p[0-9][0-9][0-9].txt
-sample/p[0-9][0-9][0-9].pdf
+sample/uc-p[0-9][0-9][0-9].txt
+sample/uc-p[0-9][0-9][0-9].pdf
 sample/tmp.pdf
 sample/*.qdf

@@ -218,7 +218,8 @@ chars = {
 	'\u00ff':			LeftCons('ch'),			# ÿ
 	'\u0152':			Syllable('.s.tha'),		# Œ
 	'\u0153':			LeftCons('hm'),			# œ
-	'\u02c6':			RightCons('n'),			# ˆ ?
+	'\u02c6':			Literal(','),			# ˆ ?
+	'\u02c7':			Literal('.'),			# ˇ
 	'\u02dc':			RightCons('ya'),		# ˜
 	'\u2013':			LeftCons('gn'),			# –
 	'\u2014':			LeftCons('tn'),			# —
@@ -232,6 +233,7 @@ chars = {
 	'\u2044':			LeftCons('l'),			# ⁄
 	'\u2122':			Syllable('d.r'),		# ™ ?
 	'\u2206':			LeftCons('"sc'),		# ∆
+	'\u2248':			LeftCons('"sn'),		# ≈
 	'\u221a':			Syllable('sna'),		# √
 	'\u221e':			Syllable('dbra'),		# ∞ ?
 	'\u2260':			Syllable('dma'),		# ≠
@@ -414,14 +416,59 @@ def decodeline(line):
 			line = line[1:]
 	return res
 
+macroman_to_utf8_table = [
+# 8x
+'\u00c4', '\u00c5', '\u00c7', '\u00c9', '\u00d1', '\u00d6', '\u00dc', '\u00e1',
+'\u00e0', '\u00e2', '\u00e4', '\u00e3', '\u00e5', '\u00e7', '\u00e9', '\u00e8',
+# 9x
+'\u00ea', '\u00eb', '\u00ed', '\u00ec', '\u00ee', '\u00ef', '\u00f1', '\u00f3',
+'\u00f2', '\u00f4', '\u00f6', '\u00f5', '\u00fa', '\u00f9', '\u00fb', '\u00fc',
+# Ax
+'\u2020', '\u00b0', '\u00a2', '\u00a3', '\u00a7', '\u2022', '\u00b6', '\u00df',
+'\u00ae', '\u00a9', '\u2122', '\u00b4', '\u00a8', '\u2260', '\u00c6', '\u00d8',
+# Bx
+'\u221e', '\u00b1', '\u2264', '\u2265', '\u00a5', '\u00b5', '\u2202', '\u2211',
+'\u220f', '\u03c0', '\u222b', '\u00aa', '\u00ba', '\u03a9', '\u00e6', '\u00f8',
+# Cx
+'\u00bf', '\u00a1', '\u00ac', '\u221a', '\u0192', '\u2248', '\u2206', '\u00ab',
+'\u00bb', '\u2026', '\u00a0', '\u00c0', '\u00c3', '\u00d5', '\u0152', '\u0153',
+# Dx
+'\u2013', '\u2014', '\u201c', '\u201d', '\u2018', '\u2019', '\u00f7', '\u25ca',
+'\u00ff', '\u0178', '\u2044', '\u20ac', '\u2039', '\u203a', '\ufb01', '\ufb02',
+# Ex
+'\u2021', '\u00b7', '\u201a', '\u201e', '\u2030', '\u00c2', '\u00ca', '\u00c1',
+'\u00cb', '\u00c8', '\u00cd', '\u00ce', '\u00cf', '\u00cc', '\u00d3', '\u00d4',
+# Fx
+'\uf8ff', '\u00d2', '\u00da', '\u00db', '\u00d9', '\u0131', '\u02c6', '\u02dc',
+'\u00af', '\u02d8', '\u02d9', '\u02da', '\u00b8', '\u02dd', '\u02db', '\u02c7',
+]
+def macroman_to_utf8_char(c):
+	if ord(c) >= 0x80 and ord(c) <= 0xff:
+		return macroman_to_utf8_table[ord(c)-0x80]
+	return c
+
+def fix_macroman_encoded_string(line):
+	return ''.join([macroman_to_utf8_char(c) for c in line])
+
 def main(args):
 	for line in args.infile:
+		if args.verbose:
+			print(line, end='')
+		if args.macroman:
+			line = fix_macroman_encoded_string(line)
+			if args.verbose:
+				print('same decoded from macroman:')
+				print(line, end='')
 		print(decodeline(line), end='')
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(
 		description=
 			'Decode Devanagari text after pdftotext (from poppler-utils)')
+	parser.add_argument('-v', '--verbose', help='print each input line before it\'s decoded version',
+			action='store_true')
+	parser.add_argument('-m', '--macroman', help='assume Mac OS Roman encoding instead of usual UTF-8 (useful for some PDF files with fonts without /ToUnicode tables)',
+			action='store_true')
 	parser.add_argument(
 		"infile",
 		type=argparse.FileType('r'),
