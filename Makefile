@@ -1,3 +1,34 @@
+# Makefile for devanagari-pdf-decoder
+#
+# Commonly used targets:
+#
+# make test
+#    (it's a default target)
+#    Run generally stable tests, optionally customized by setting FRAGMENTS, PAGES, LINES and VERBOSE
+#    make PAGES='p113 uc-p002l'
+#       only run tests for these pages
+#    make FRAGMENTS=f003 VERBOSE=1
+#       only test this fragment (see test/f*.txt), and print the fragment
+#       before decoding
+#    make PAGES='p113' LINES=3
+#       only compare results for third line of corresponding test
+
+# make sample/p006.qdf
+#    Prepare the 'QDF' version of a given page for vi1000 (useful to see the
+#    actual Tf and Tj commands along with font encoding details)
+
+# make sample/uc-p006.qdf
+#    Prepare the 'QDF' version of a given page for Upani.sat Candrikaa (
+
+# make go-uc-p006
+#    fix sample/uc-p006.qdf after editing, run standard PDF viewer on it. It is
+#    useful to try and change given .qdf file to see what exactly changes in
+#    actual on-screen output in PDF viewer.
+#
+#    Commonly used tricks (run go-.... after corresponding edits)
+#       <0002>Tf => <00020202020202>Tf
+#       duplicate some specific char (02) to see what it corresponds to.
+
 .PHONY: FORCE
 
 # we use bash for <(cmd) argument to diff
@@ -31,6 +62,18 @@ VERBOSE := 0
 test: $(patsubst %, sample/%.txt, ${PAGES}) FORCE
 	@VERBOSE=${VERBOSE} test/test-line "${PAGES}" "${LINES}" "${FRAGMENTS}"
 
+sample/%l.txt: sample/%.pdf
+	WIDTH=$$(pdfinfo "$<" | awk 'match($$0, "Page size: *([0-9]+)[^0-9]+([0-9]+)", m) { print m[2] }'); \
+	echo width: $$WIDTH; \
+	HALFWIDTH=$$((WIDTH/2)); \
+	pdftotext -layout -W $$HALFWIDTH -H 10000 "$<" "$@"
+
+sample/%r.txt: sample/%.pdf
+	WIDTH=$$(pdfinfo "$<" | awk 'match($$0, "Page size: *([0-9]+)[^0-9]+([0-9]+)", m) { print m[2] }'); \
+	echo width: $$WIDTH; \
+	HALFWIDTH=$$((WIDTH/2)); \
+	pdftotext -layout -W $$HALFWIDTH -H 10000 -x $$HALFWIDTH "$<" "$@"
+
 sample/%.txt: sample/%.pdf
 	pdftotext -layout -nopgbrk "$<"
 
@@ -57,6 +100,9 @@ sample/uc-p%.pdf: sample/UpanishathChandrikaPart1.pdf
 go-%: sample/%.qdf
 	fix-qdf "$<" > sample/tmp.pdf
 	xdg-open sample/tmp.pdf
+
+sample/uc-%-decoded.txt: sample/uc-%.txt
+	src/decode-shree-devanagari.py -m "$<" > $@
 
 sample/%-decoded.txt: sample/%.txt
 	src/decode-shree-devanagari.py "$<" > $@
