@@ -168,6 +168,7 @@ chars = {
 	'\u00a9':			Syllable('dda'),		# ©
 	'\u00ac':			Literal('[???]'),		# ¬
 	'\u00ae':			Syllable('dba'),		# ®
+	'\u00af':			RightCons('r'),			# ø
 	'\u00b0':			Spacing(''),			# ° (spacing e.g. after ka, ruu)
 	'\u00b1':			Syllable('kla'),		# ±
 	'\u00b4':			Syllable('ddha'),		# ´
