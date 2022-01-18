@@ -175,6 +175,7 @@ chars = {
 	'\u00b5':			Syllable('"nkta'),		# µ
 	'\u00b7':			Syllable('ruu'),		# ·
 	'\u00bb':			Syllable('kka'),		# »
+	'\u00c0':			Syllable('.t.tha'),		# À
 	'\u00c1':			Syllable('dra'),		# Á
 	'\u00c2':			Syllable('hya'),		# Â
 	'\u00c4':			LeftCons('~nj'),		# Ä
@@ -192,6 +193,7 @@ chars = {
 	'\u00d4':			Vowel('e'),				# Ô
 	'\u00d5':			Syllable('.s.ta'),		# Õ
 	'\u00d6':			Syllable('hna'),		# Ö
+	'\u00d8':			Syllable('dgha'),		# Ø
 	'\u00da':			Vowel('i'),				# Ú
 	'\u00dc':			Syllable('h.na'),		# Ü
 	'\u00e0':			Syllable('hva'),		# à
