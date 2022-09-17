@@ -112,7 +112,7 @@ sample/uc-%-decoded.txt: sample/uc-%.txt
 	src/decode-shree-devanagari.py -m "$<" > $@
 
 sample/%-decoded.txt: sample/%.txt
-	src/decode-shree-devanagari.py "$<" > $@
+	src/decode-shree-devanagari.py "$<" > "$@"
 
 clean:
 	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/*.qdf sample/tmp.pdf sample/vi*.txt sample/uc-p*.{pdf,txt} sample/Up*.txt
