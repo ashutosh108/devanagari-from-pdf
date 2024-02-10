@@ -104,6 +104,9 @@ sample/p%.pdf: sample/vi1000\ -\ govindAcArya\ [san].pdf
 sample/uc-p%.pdf: sample/UpanishathChandrikaPart1.pdf
 	pdfseparate -f $(patsubst sample/uc-p%.pdf,%,$@) -l $(patsubst sample/uc-p%.pdf,%,$@) "$<" "$@"
 
+sample/mbtn2-p%.pdf: sample/mahAbhArata-tAtparya-nirNaya\ -\ bannanje\ govindAcArya\ part2\ ch19-32[san].pdf
+	pdfseparate -f $(patsubst sample/mbtn2-p%.pdf,%,$@) -l $(patsubst sample/mbtn2-p%.pdf,%,$@) "$<" "$@"
+
 go-%: sample/%.qdf
 	fix-qdf "$<" > sample/tmp.pdf
 	xdg-open sample/tmp.pdf
