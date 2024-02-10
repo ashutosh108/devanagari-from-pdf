@@ -79,7 +79,7 @@ chars = {
 	'\u002b':			Literal('+'),			# +
 	'\u002c':			Literal(','),			# ,
 	'\u002d':			Literal('-'),			# -
-	'\u002e':			Literal('.'),			# .
+	'\u002e':			Literal('{.}'),			# .
 	'\u002f':			Literal('[???]'),		# /
 	'\u0030':			Literal('0'),			# 0
 	'\u0031':			Literal('1'),			# 1

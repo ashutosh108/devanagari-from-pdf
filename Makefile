@@ -118,6 +118,13 @@ sample/%-decoded.txt: sample/%.txt
 	src/decode-shree-devanagari.py "$<" > "$@"
 
 clean:
-	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/*.qdf sample/tmp.pdf sample/vi*.txt sample/uc-p*.{pdf,txt} sample/Up*.txt
+	rm -f sample/p[0-9][0-9][0-9].txt sample/p[0-9][0-9][0-9].pdf sample/*.qdf sample/tmp.pdf sample/vi*.txt sample/uc-p*.{pdf,txt} sample/Up*.txt sample/mbtn2-p*.txt sample/mbtn2-p*.pdf
 
 qdf: sample/vi1000\ -\ govindAcArya\ [san].qdf
+
+MBTN2_PAGES := $(shell seq -f %04.0f 1 856)
+
+.PRECIOUS: sample/%.txt
+.PRECIOUS: sample/mbtn2-p%.pdf
+
+mbtn2: $(patsubst %,sample/mbtn2-p%-decoded.txt,${MBTN2_PAGES})
