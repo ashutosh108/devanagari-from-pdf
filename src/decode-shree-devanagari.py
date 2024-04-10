@@ -130,7 +130,7 @@ chars = {
 	'\u005e':			LeftCons('.s'),			# ^
 	'\u005f':			LeftCons('s'),			# _
 	'\u0060':			Syllable('ha'),			# `
-	'\u0061':			Syllable('.la'),		# a
+	'\u0061':			Syllable('"la'),		# a
 	'\u0062':			LeftCons('k.s'),		# b
 	'\u0063':			LeftCons('j~n'),		# c
 	'\u0064':			Syllable('"sra'),		# d
