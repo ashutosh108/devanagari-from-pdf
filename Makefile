@@ -123,8 +123,11 @@ clean:
 qdf: sample/vi1000\ -\ govindAcArya\ [san].qdf
 
 MBTN2_PAGES := $(shell seq -f %04.0f 1 856)
+UC_PAGES := $(shell seq -f %03.0f 1 368)
 
 .PRECIOUS: sample/%.txt
 .PRECIOUS: sample/mbtn2-p%.pdf
+.PRECIOUS: sample/uc-p%.pdf
 
 mbtn2: $(patsubst %,sample/mbtn2-p%-decoded.txt,${MBTN2_PAGES})
+uc: $(patsubst %,sample/uc-p%-decoded.txt,${UC_PAGES})
